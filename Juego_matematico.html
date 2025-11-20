@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Habilidad Matemáticas</title>
+<style>
+:root {
+  --primary: #5a189a; /* deeper for contrast */
+  --primary-600: #6d28d9;
+  --primary-700: #5b21b6;
+  --primary-800: #3b0a77;
+  --bg: #faf9ff;
+  --surface: #ffffff;
+  --muted: #ede6ff;
+  --text: #140e26;
+  --text-soft: #2a1b4a;
+  --text-inverse: #ffffff;
+  --border: rgba(17, 12, 34, 0.12);
+  --radius: 12px;
+  --shadow: 0 6px 16px rgba(17, 12, 34, 0.12);
+  --font-size-base: 16px;
+}
+
+/* Hero header like Social */
+:root { --hero-h: 220px; }
+header.hero { position:relative; height: var(--hero-h); background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color:#fff; display:flex; align-items:center; overflow:hidden; }
+header.hero .wrap { width:100%; max-width: 980px; margin: 0 auto; padding: 16px; }
+header.hero h1 { margin:0 0 6px 0; }
+header.hero p { margin:0; opacity:1; color:#fff; }
+header.hero .top-bar { position:absolute; top:0; left:0; right:0; background:#ffffff; color: var(--primary-700); font-weight:900; padding:10px 14px; }
+.container { max-width: 980px; margin: 16px auto 32px; padding: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+
+/* Minimal home button */
+.home-btn { position: fixed; top: 16px; right: 16px; width: 42px; height: 42px; border-radius: 10px; display:flex; align-items:center; justify-content:center; background: var(--surface); color: var(--primary-700); border: 1px solid var(--border); box-shadow: var(--shadow); text-decoration:none; z-index: 2002; }
+.home-btn:hover { filter: brightness(1.03); transform: translateY(-1px); }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  line-height: 1.6;
+}
+html { font-size: var(--font-size-base); }
+
+a { color: var(--primary-700); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: var(--text-inverse); }
+nav { background: var(--primary-700); box-shadow: var(--shadow); }
+nav a { color: var(--text-inverse) !important; border-radius: 8px; font-weight: 600; }
+nav a:hover { background: var(--primary-600) !important; }
+
+section, .container, .contact-card, .descarga-opciones, .contact-form, .contact-box {
+  background: var(--surface) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow) !important;
+  border: 1px solid var(--border) !important;
+}
+
+h1, h2, h3 { color: var(--primary-700); }
+
+/* Ensure headings on dark headers are white for contrast */
+header, .site-header, nav, footer { color: var(--text-inverse) !important; }
+header h1, header h2, header p, .site-header h1, .site-header h2, .site-header p, nav a, footer p { color: var(--text-inverse) !important; }
+
+li strong, .contact-card p, .btn-playstore, .btn-appstore { color: var(--primary-700); }
+
+button, .btn, input[type="submit"], .social-button {
+  background: var(--primary-600) !important;
+  color: var(--text-inverse) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 10px 16px !important;
+  cursor: pointer !important;
+  transition: filter .2s ease, transform .12s ease, box-shadow .2s ease;
+}
+button:hover, .btn:hover, input[type="submit"]:hover, .social-button:hover, .btn-playstore:hover, .btn-appstore:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(17, 12, 34, 0.18);
+}
+
+input, textarea, select, .resp, .controls {
+  border: 1.5px solid var(--primary-600) !important;
+  border-radius: 10px !important;
+  background: var(--surface) !important;
+  color: var(--text) !important;
+}
+
+footer { background: var(--primary-700) !important; color: var(--text-inverse) !important; }
+.boton, .boton-abajo { background: var(--primary-600) !important; }
+
+.message {
+  background: var(--muted) !important;
+  color: var(--text-soft) !important;
+  border-radius: var(--radius) !important;
+}
+
+/* Cards and layout helpers */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+.grid { display: grid; gap: 16px; }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+/* Progress bar */
+.progress { width: 100%; height: 10px; background: #eee; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+.progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--primary-600), var(--primary)); width: 0%; transition: width .6s ease; }
+
+/* Animations */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeInUp .4s ease both; }
+
+/* Floating Action Button */
+.fab {
+  position: fixed !important;
+  right: 16px !important;
+  top: 16px !important;
+  bottom: auto !important;
+  left: auto !important;
+  z-index: 1000 !important;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary-600);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px rgba(17,12,34,.18);
+  border: none;
+}
+.fab:hover { filter: brightness(1.06); transform: translateY(-1px); }
+
+/* Drawer panel */
+.drawer-backdrop { position: fixed; inset: 0; background: rgba(10, 6, 20, .36); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.drawer { position: fixed; top: 0; right: -360px; width: 360px; max-width: 90%; height: 100vh; background: var(--surface); box-shadow: -4px 0 20px rgba(0,0,0,.12); border-left: 1px solid var(--border); transition: right .28s ease; display: flex; flex-direction: column; }
+.drawer.open { right: 0; }
+.drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+.drawer header { padding: 16px; background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: #fff; }
+.drawer header h3 { color: #fffbeb !important; }
+.drawer .content { padding: 16px; overflow: auto; flex: 1; }
+
+/* Toast */
+.toast { position: fixed; right: 20px; bottom: 20px; transform: translateY(12px); background: var(--primary-700); color: #fff; padding: 8px 12px; border-radius: 8px; opacity: 0; transition: .22s ease; box-shadow: 0 10px 24px rgba(0,0,0,.18); font-size: 13px; max-width: 80vw; }
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* Ripple utility */
+.ripple { position: relative; overflow: hidden; }
+.ripple::after { content: ""; position: absolute; border-radius: 50%; transform: scale(0); background: rgba(255,255,255,.35); opacity: 0; pointer-events: none; }
+
+/* Reduced motion utility */
+.no-anim *, .no-anim *::before, .no-anim *::after { transition: none !important; animation: none !important; }
+
+/* Dark theme */
+[data-theme="dark"] {
+  --bg: #0f0a1a;
+  --surface: #171022;
+  --muted: #1f1530;
+  --text: #ece8f5;
+  --text-soft: #cfc4e8;
+  --text-inverse: #ffffff;
+  --border: rgba(236, 232, 245, 0.12);
+  --shadow: 0 8px 20px rgba(0,0,0,.35);
+  /* armonía morado en oscuro */
+  --primary: #7c3aed; /* violeta vivo legible sobre oscuro */
+  --primary-600: #7c3aed;
+  --primary-700: #6d28d9;
+  --primary-800: #4c1d95;
+}
+[data-theme="dark"] header { background: linear-gradient(90deg, #2b0f58, var(--primary-600)); }
+[data-theme="dark"] nav { background: #2b0f58; }
+[data-theme="dark"] footer { background: #2b0f58 !important; }
+
+/* Switch (toggle) */
+.switch { position: relative; width: 44px; height: 24px; background: #e5e7eb; border-radius: 999px; cursor: pointer; transition: background .2s ease; border: 1px solid var(--border); }
+.switch .thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,.2); transition: left .2s ease, background .2s ease; }
+.switch.on { background: var(--primary-600); }
+.switch.on .thumb { left: 22px; background: #111827; }
+.switch.on .thumb .icon-moon { color: #f5f5f5 !important; }
+
+/* Segmented control */
+.segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.segmented button { border: none; background: transparent; padding: 8px 12px; cursor: pointer; color: var(--text); transition: background .18s ease, color .18s ease; font-weight: 600; }
+.segmented button + button { border-left: 1px solid var(--border); }
+.segmented button:hover { background: var(--muted); }
+.segmented button:active { transform: none; }
+.segmented button.active { background: color-mix(in srgb, var(--primary-600) 14%, transparent); color: var(--primary-700); }
+[data-theme="dark"] .switch { background: #1f2937; border-color: var(--border); }
+[data-theme="dark"] .segmented { background: var(--surface); }
+
+/* Tabs inside drawer */
+.tabs { display: flex; gap: 8px; padding: 8px 16px; border-bottom: 1px solid var(--border); }
+.tabs .tab-btn { border: none; background: transparent; color: var(--text); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+.tabs .tab-btn.active { background: var(--muted); }
+
+/* Slide animation for tab content */
+@keyframes slideInX { from { opacity:.0; transform: translateX(6px);} to{ opacity:1; transform:none;} }
+.slide-in { animation: slideInX .25s ease both; }
+
+/* Level 2 puzzle styles */
+.puzzle-wrap{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+.puzzle-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; width:100%; max-width:520px; }
+.piece{ position:relative; width:100%; padding-top:100%; border-radius:12px; overflow:hidden; box-shadow: 0 6px 14px rgba(8,18,30,.08); cursor:pointer; background-size: 400% 400%; background-repeat:no-repeat; background-position:center; }
+.piece::before{ content: attr(data-n); position:absolute; top:6px; left:8px; font-size:12px; font-weight:700; color: rgba(0,0,0,.35); }
+.piece.locked{ filter: grayscale(.1) contrast(.95) brightness(.98); }
+.piece.locked::after{ content:"\1F512"; position:absolute; right:6px; bottom:4px; font-size:16px; opacity:.85; }
+.piece.selected{ outline:3px solid var(--primary-600); outline-offset:-3px; }
+/* Save & Exit button */
+.save-exit-btn{ position: fixed; bottom: 20px; right: 20px; z-index: 1500; }
+</style>
+<style>
+:root {
+  --c1: #6b21a8;
+  --c2: #7c3aed;
+  --c3: #c4b5fd;
+  --c4: var(--bg);
+  --c5: #efe7ff;
+  --radius: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.site-header {
+  background: linear-gradient(90deg, var(--c1), var(--c2));
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+.site-header h1 {
+  margin: 0;
+}
+
+#game-container {
+  padding: 16px;
+}
+
+.level {
+  padding: 16px;
+}
+
+.level h2 {
+  background: var(--c3);
+  padding: 12px;
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.objective {
+  font-style: italic;
+  margin: 8px 0 16px;
+  text-align: center;
+}
+
+.game-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 8px #0002;
+  padding: 16px;
+  margin: 12px 0;
+}
+
+.game-card h3 {
+  margin-top: 0;
+  color: var(--text);
+}
+
+.play-area p {
+  font-size: 1.2rem;
+  margin: 8px 0;
+}
+
+.resp {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  margin: 6px 0;
+  border: 2px solid var(--c2);
+  border-radius: var(--radius);
+}
+
+.btn {
+  background: var(--c1);
+  color: #fff;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+}
+
+.message {
+  text-align: center;
+  background: var(--c5);
+  padding: 20px;
+  border-radius: var(--radius);
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+/* Level 2 puzzle styles */
+.puzzle-wrap{ display:flex; flex-direction:column; align-items:center; gap:12px; }
+.puzzle-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:8px; width:100%; max-width:520px; }
+.piece{ position:relative; width:100%; padding-top:100%; border-radius:12px; overflow:hidden; box-shadow: 0 6px 14px rgba(8,18,30,.08); cursor:pointer; background-size: 400% 400%; background-repeat:no-repeat; background-position:center; }
+.piece::before{ content: attr(data-n); position:absolute; top:6px; left:8px; font-size:12px; font-weight:700; color: rgba(0,0,0,.35); }
+.piece.locked{ filter: grayscale(.1) contrast(.95) brightness(.98); }
+.piece.locked::after{ content:"\1F512"; position:absolute; right:6px; bottom:4px; font-size:16px; opacity:.85; }
+.piece.selected{ outline:3px solid var(--primary-600); outline-offset:-3px; }
+</style>
+<script>
+  // Session guard
+  (function(){
+    try { if(!localStorage.getItem('session')) window.location.href='welcome-form.html'; } catch(e){}
+  })();
+  // Per-account helpers
+  function getUsers(){ try { return JSON.parse(localStorage.getItem('users_db')||'{}'); } catch(e){ return {}; } }
+  function saveUsers(u){ try { localStorage.setItem('users_db', JSON.stringify(u||{})); } catch(e){} }
+  function setProgressMath(level, total){
+    try {
+      const session = localStorage.getItem('session');
+      if(!session) return;
+      const users = getUsers();
+      users[session] = users[session] || {};
+      const pct = Math.round((Math.min(level, total)/total)*100);
+      users[session].progress = users[session].progress || {};
+      users[session].progress.math = { level, pct };
+      saveUsers(users);
+    } catch(e){}
+  }
+  function getProgressMath(){
+    try {
+      const session = localStorage.getItem('session');
+      if(!session) return null;
+      const users = getUsers();
+      return users[session] && users[session].progress && users[session].progress.math || null;
+    } catch(e){ return null; }
+  }
+  function getMathState(){
+    try{
+      const session = localStorage.getItem('session');
+      if(!session) return null;
+      const users = getUsers();
+      return users[session] && users[session].math_state || null;
+    }catch(e){ return null; }
+  }
+  function setMathState(state){
+    try{
+      const session = localStorage.getItem('session');
+      if(!session) return;
+      const users = getUsers();
+      users[session] = users[session] || {};
+      users[session].math_state = state;
+      saveUsers(users);
+    }catch(e){}
+  }
+  function addMathStats(deltaMs, deltaExercises){
+    try{
+      const session = localStorage.getItem('session');
+      if(!session) return;
+      const users = getUsers();
+      users[session] = users[session] || {};
+      users[session].math_stats = users[session].math_stats || { time_ms:0, exercises:0 };
+      users[session].math_stats.time_ms += Math.max(0, deltaMs||0);
+      users[session].math_stats.exercises += Math.max(0, deltaExercises||0);
+      saveUsers(users);
+    }catch(e){}
+  }
+</script>
+</head>
+
+<body>
+<a href="Inicio.html" class="home-btn" aria-label="Volver a selección de juegos" title="Inicio">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7"/><path d="M9 22V12h6v10"/></svg>
+</a>
+<header class="hero">
+  <div class="top-bar">Habilidad Matemáticas</div>
+  <div class="wrap">
+    <h1>Habilidad Matemáticas</h1>
+    <p>Avanza nivel por nivel y conviértete en un maestro matemático 🧮</p>
+  </div>
+</header>
+
+<main class="container">
+  <div id="game-container"></div>
+  <div id="game-toast" class="toast" role="status" aria-live="polite"></div>
+</main>
+
+<footer class="site-footer">
+  <small>© 2025 — Juegos educativos — Namiro</small>
+</footer>
+
+<script>
+// Utils
+const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const qs = s => document.querySelector(s);
+function getQuery(){ const p=new URLSearchParams(location.search); return Object.fromEntries(p.entries()); }
+function toast(msg){ const t=qs('#game-toast'); if(!t) return; t.textContent=msg||''; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); }
+
+// Difficulty from modal: low/mid/high affects question complexity only
+const query = getQuery();
+const diff = (query.lvl||'mid');
+
+// State and persistence (3 total levels)
+const TOTAL_LEVELS = 3;
+let currentLevel = 1;
+// If there is in-progress Level 3 or 2, resume accordingly regardless of start param
+try {
+  const st = getMathState();
+  if(st && st.level3) {
+    currentLevel = 3;
+  } else if(st && st.level2) {
+    currentLevel = 2;
+  } else if(String(query.start||'')==='1'){
+    currentLevel = 1;
+  } else {
+    const saved = getProgressMath();
+    if(saved && Number.isFinite(saved.level)) currentLevel = Math.max(1, Math.min(saved.level+1, TOTAL_LEVELS));
+  }
+} catch(e){}
+
+function saveLevelPassed(nextLevel){ setProgressMath(Math.min(nextLevel-1, TOTAL_LEVELS), TOTAL_LEVELS); }
+
+// Level 1: Quiz básico (70% para aprobar)
+function genOp(range){
+  const a = rnd(1, range), b = rnd(1, range);
+  return { add:[`¿${a}+${b}?`, a+b], sub:[`¿${Math.max(a,b)}-${Math.min(a,b)}?`, Math.max(a,b)-Math.min(a,b)], mul:[`¿${a}×${b}?`, a*b], div: (()=>{ const d=rnd(2,Math.max(3,Math.floor(range/2))); const ans=rnd(2,Math.max(3,Math.floor(range/2))); return [`¿${d*ans}÷${d}?`, ans]; })() };
+}
+function makeQuizQuestions(n){
+  const range = diff==='low'? 10 : (diff==='high'? 40 : 20);
+  const out=[];
+  for(let i=0;i<n;i++){
+    const g = genOp(range);
+    const pool = [g.add, g.sub, g.mul, g.div];
+    const q = pool[rnd(0,pool.length-1)];
+    out.push({ q: q[0], a: String(q[1]) });
+  }
+  // Teoría básicas: símbolos y propiedades simples
+  out.push({ q:'¿Qué símbolo representa multiplicación?', a:'×' });
+  out.push({ q:'¿Qué operación deshace una suma?', a:'resta' });
+  return out;
+}
+function startLevel1(){
+  const root = qs('#game-container');
+  root.innerHTML = '';
+  const h = document.createElement('h2'); h.textContent = 'Nivel 1 · Examen básico'; root.appendChild(h);
+  const p = document.createElement('p'); p.className='objective'; p.textContent='Suma, resta, multiplicación y división (teoría y práctica).'; root.appendChild(p);
+
+  const totalQ = 12; // +2 teoría = 14
+  const qsList = makeQuizQuestions(totalQ);
+  const target = Math.ceil(0.7 * (qsList.length));
+  let correct = 0, index = 0;
+
+  const card = document.createElement('div'); card.className='game-card'; root.appendChild(card);
+  const qEl = document.createElement('p'); qEl.style.fontWeight='700'; card.appendChild(qEl);
+  const inp = document.createElement('input'); inp.className='resp'; card.appendChild(inp);
+  const btn = document.createElement('button'); btn.className='btn'; btn.textContent='Comprobar'; card.appendChild(btn);
+  const fb = document.createElement('div'); fb.style.marginTop='8px'; card.appendChild(fb);
+
+  function renderQ(){ const cur=qsList[index]; qEl.textContent = cur.q; inp.value=''; fb.textContent=''; inp.focus(); }
+  function finish(){
+    const pass = correct >= target;
+    const msg = pass? '🌟 ¡Aprobaste! Pasando al Nivel 2...' : '💡 No alcanzaste el 70%. Inténtalo de nuevo.';
+    root.insertAdjacentHTML('beforeend', `<div class="message">${msg}</div>`);
+    if(pass){ saveLevelPassed(2); setTimeout(()=> startLevel2(), 1200); }
+  }
+  btn.onclick = ()=>{
+    const cur=qsList[index]; const v=inp.value.trim().toLowerCase();
+    if(v===cur.a.toLowerCase()){ correct++; fb.textContent='✅ Correcto'; }
+    else { fb.textContent=`❌ Incorrecto`; }
+    index++;
+    if(index>=qsList.length) finish(); else renderQ();
+  };
+  renderQ();
+}
+
+// Level 2: Rompecabezas 8×8 con preguntas para desbloquear piezas
+function startLevel2(){
+  const root = qs('#game-container');
+  root.innerHTML = '';
+  const title = document.createElement('h2'); title.textContent = 'Nivel 2 · Rompecabezas 4×4'; root.appendChild(title);
+  const desc = document.createElement('p'); desc.className='objective'; desc.textContent='Toca una pieza y responde el ejercicio para desbloquearla. Selecciona dos piezas desbloqueadas para intercambiarlas. Completa la imagen para obtener la llave del Nivel 3.'; root.appendChild(desc);
+
+  // Configuración
+  const N = 4; const COUNT = N*N;
+  function cardSVG(){
+    const svg = `<?xml version="1.0" encoding="UTF-8"?>
+    <svg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'>
+      <defs>
+        <filter id='shadow' x='-20%' y='-20%' width='140%' height='140%'>
+          <feDropShadow dx='0' dy='8' stdDeviation='10' flood-color='rgba(0,0,0,0.15)'/>
+        </filter>
+      </defs>
+      <rect x='40' y='40' width='520' height='520' rx='28' fill='#ffffff' filter='url(#shadow)' stroke='#e5e7eb' stroke-width='2'/>
+      <rect x='60' y='60' width='480' height='480' rx='22' fill='#f3f4f6'/>
+      <text x='300' y='330' text-anchor='middle' font-size='120'>🧮</text>
+    </svg>`;
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+  }
+  const imgUrl = cardSVG();
+  // Estado
+  let pieces = Array.from({length: COUNT}, (_,i)=> i);
+  let unlocked = new Set();
+  let selA = null;
+  let pendingIdx = null;
+  let exercises = 0;
+  const t0 = Date.now();
+  // Restaurar estado por cuenta si existe y coincide con 6x6
+  const savedState = getMathState();
+  if(savedState && savedState.level2 && Array.isArray(savedState.level2.pieces) && savedState.level2.pieces.length===COUNT){
+    pieces = savedState.level2.pieces.slice();
+    unlocked = new Set(savedState.level2.unlocked||[]);
+    exercises = Number(savedState.level2.exercises||0) || 0;
+  } else {
+    for(let i=pieces.length-1;i>0;i--){ const j = rnd(0,i); [pieces[i],pieces[j]]=[pieces[j],pieces[i]]; }
+  }
+
+  // UI
+  const wrap = document.createElement('div'); wrap.className='puzzle-wrap'; root.appendChild(wrap);
+  const grid = document.createElement('div'); grid.className='puzzle-grid'; wrap.appendChild(grid);
+  const qbox = document.createElement('div'); qbox.className='game-card'; qbox.style.maxWidth='520px'; qbox.style.width='100%'; wrap.appendChild(qbox);
+  qbox.innerHTML = '<h3>Desbloquear pieza</h3>';
+  const qText = document.createElement('div'); qbox.appendChild(qText);
+  const qInp = document.createElement('input'); qInp.className='resp'; qbox.appendChild(qInp);
+  const qBtn = document.createElement('button'); qBtn.className='btn'; qBtn.textContent='Comprobar'; qbox.appendChild(qBtn);
+  const qFb = document.createElement('div'); qFb.style.marginTop='8px'; qbox.appendChild(qFb);
+  qbox.style.display='none';
+
+  // Botón Guardar y salir
+  const saveExit = document.createElement('button');
+  saveExit.className = 'btn save-exit-btn';
+  saveExit.textContent = 'Guardar y salir';
+  document.body.appendChild(saveExit);
+  function persistState(){
+    setMathState({ level2: { pieces: pieces.slice(), unlocked: Array.from(unlocked), exercises } });
+    addMathStats(Date.now() - t0, 0);
+  }
+  saveExit.onclick = ()=>{ persistState(); window.location.href = 'Inicio.html'; };
+
+  // Helpers
+  function bgPos(ofs){ const r = Math.floor(ofs / N), c = ofs % N; return `${(c/(N-1))*100}% ${(r/(N-1))*100}%`; }
+  function render(){
+    grid.innerHTML='';
+    pieces.forEach((ofs, idx)=>{
+      const el = document.createElement('div'); el.className='piece';
+      el.dataset.idx = String(idx); el.dataset.ofs = String(ofs); el.dataset.n = String(ofs+1);
+      el.style.backgroundImage = `url(${imgUrl})`;
+      el.style.backgroundSize = `${N*100/(N-1)}% ${N*100/(N-1)}%`;
+      el.style.backgroundPosition = bgPos(ofs);
+      if(!unlocked.has(idx)) el.classList.add('locked');
+      if(selA===idx) el.classList.add('selected');
+      el.addEventListener('click', ()=> onPieceClick(idx));
+      grid.appendChild(el);
+    });
+  }
+  function isSolved(){ return pieces.every((v,i)=> v===i); }
+
+  // Generación de preguntas (más complejas que nivel 1)
+  function genHarder(){
+    const r = diff==='low'? 20 : (diff==='high'? 80 : 40);
+    const a=rnd(10,r), b=rnd(10,r), c=rnd(2,10);
+    const type = rnd(0,2);
+    if(type===0){ return {q:`${a}+${b}−${c} = ?`, a:String(a+b-c)}; }
+    if(type===1){ return {q:`${a}×${c}−${b} = ?`, a:String(a*c-b)}; }
+    const d=rnd(2,10); const ans=rnd(2,10); return {q:`(${d*ans}÷${d})+${c} = ?`, a:String(ans+c)};
+  }
+
+  function askFor(idx){
+    pendingIdx = idx; qbox.style.display=''; qFb.textContent=''; qInp.value='';
+    const q = genHarder(); qText.textContent = `Pieza ${idx+1}: ${q.q}`; qbox.dataset.ans = q.a.toLowerCase(); qInp.focus();
+  }
+  qBtn.onclick = ()=>{
+    if(pendingIdx===null) return; const v = qInp.value.trim().toLowerCase(); const ans = (qbox.dataset.ans||'').toLowerCase();
+    exercises += 1;
+    if(v===ans){ unlocked.add(pendingIdx); qFb.textContent='✅ ¡Pieza desbloqueada!'; qbox.style.display='none'; pendingIdx=null; render(); }
+    else { qFb.textContent='❌ Incorrecto. Intenta nuevamente.'; }
+  };
+
+  function onPieceClick(idx){
+    if(!unlocked.has(idx)){ askFor(idx); return; }
+    if(selA===null){ selA = idx; render(); return; }
+    if(selA===idx){ selA = null; render(); return; }
+    if(!unlocked.has(selA) || !unlocked.has(idx)){ toast('Debes desbloquear ambas piezas'); return; }
+    const a = selA, b = idx; [pieces[a], pieces[b]] = [pieces[b], pieces[a]]; selA = null; render();
+    if(isSolved()){
+      saveLevelPassed(3);
+      root.insertAdjacentHTML('beforeend', `<div class="message">🔑 ¡Rompecabezas completo! Has obtenido la llave del Nivel 3.</div>`);
+      addMathStats(Date.now()-t0, exercises);
+      setMathState({});
+      setTimeout(()=> startLevel3(), 1200);
+    }
+  }
+
+  render();
+  // Guardar al salir de la página
+  window.addEventListener('beforeunload', ()=>{ persistState(); addMathStats(Date.now()-t0, exercises); });
+}
+
+// Level 3: Runner con 6 fases, checkpoints y preguntas
+function startLevel3(){
+  const root = qs('#game-container');
+  root.innerHTML = '';
+  const title = document.createElement('h2'); title.textContent = 'Nivel 3 · Runner'; root.appendChild(title);
+  const desc = document.createElement('p'); desc.className='objective'; desc.textContent='Corre por 6 fases. La velocidad aumenta cada fase. Entre fases responde una pregunta para continuar.'; root.appendChild(desc);
+
+  const card = document.createElement('div'); card.className='game-card'; card.style.overflow='hidden'; root.appendChild(card);
+  const hud = document.createElement('div'); hud.style.display='flex'; hud.style.justifyContent='space-between'; hud.style.marginBottom='8px'; card.appendChild(hud);
+  const phaseEl = document.createElement('div'); const distEl = document.createElement('div'); const speedEl = document.createElement('div');
+  hud.appendChild(phaseEl); hud.appendChild(distEl); hud.appendChild(speedEl);
+  const area = document.createElement('div'); area.style.position='relative'; area.style.height='220px'; area.style.background='linear-gradient(#f8fafc,#eef2ff)'; area.style.borderRadius='12px'; area.style.overflow='hidden'; card.appendChild(area);
+  // línea de meta visible (al 90% del ancho visual)
+  const finish = document.createElement('div'); Object.assign(finish.style,{ position:'absolute', top:'0', bottom:'0', left:'90%', width:'4px', background:'#16a34a66' }); area.appendChild(finish);
+
+  // Save & Exit
+  const saveExit = document.createElement('button'); saveExit.className='btn save-exit-btn'; saveExit.textContent='Guardar y salir'; document.body.appendChild(saveExit);
+
+  // State
+  const PHASES = 6;
+  let phase = 1;
+  let distance = 0; // 0..target
+  let speed = 120; // px/s base
+  let lane = 1; // 0,1,2
+  function getTarget(){ return 1000 * phase; } // distancia por fase (meta)
+  let running = true;
+  let last = performance.now();
+  let obstacles = [];
+  let exercises = 0;
+  const t0 = Date.now();
+  let finished = false;
+
+  // Resume from saved state
+  (function restore(){
+    const st = getMathState();
+    if(st && st.level3){
+      phase = Math.min(PHASES, Math.max(1, Number(st.level3.phase||1)));
+      distance = Math.max(0, Math.min(getTarget(), Number(st.level3.distance||0)));
+      lane = Math.max(0, Math.min(2, Number(st.level3.lane||1)));
+      exercises = Number(st.level3.exercises||0) || 0;
+    }
+  })();
+
+  function persist(){ setMathState({ level3: { phase, distance, lane, exercises } }); addMathStats(Date.now()-t0, 0); }
+  saveExit.onclick = ()=>{ persist(); window.location.href='Inicio.html'; };
+
+  // Player
+  const player = document.createElement('div');
+  Object.assign(player.style, { position:'absolute', width:'26px', height:'26px', left:'50%', marginLeft:'-13px', borderRadius:'50%', background:'#7c3aed', boxShadow:'0 6px 12px rgba(0,0,0,.18)' });
+  area.appendChild(player);
+  function placePlayer(){ const laneH = area.clientHeight/3; const y = Math.round(laneH*lane + laneH/2 - 13); player.style.top = y+'px'; }
+  placePlayer();
+  function playerCenterX(){ return Math.round(area.clientWidth*0.5); }
+  function obstacleCenterX(o){ return area.clientWidth - o.x - 11; }
+
+  // Obstacles
+  function spawnObstacle(){
+    const o = document.createElement('div');
+    const laneO = rnd(0,2);
+    Object.assign(o.style, { position:'absolute', width:'22px', height:'22px', right:'-30px', borderRadius:'6px', background:'#ef4444' });
+    const laneH = area.clientHeight/3; const y = Math.round(laneH*laneO + laneH/2 - 11); o.style.top = y+'px';
+    area.appendChild(o);
+    obstacles.push({ el:o, x: area.clientWidth+30, lane: laneO });
+  }
+
+  // Input
+  function onKey(e){
+    if(e.key==='ArrowUp' || e.key==='ArrowDown'){
+      e.preventDefault(); // evita que la página se desplace
+      if(e.key==='ArrowUp'){ lane=Math.max(0,lane-1); placePlayer(); }
+      else { lane=Math.min(2,lane+1); placePlayer(); }
+    }
+  }
+  document.addEventListener('keydown', onKey, { passive:false });
+
+  // Controles táctiles: botones y taps en el área
+  const ctrlWrap = document.createElement('div');
+  Object.assign(ctrlWrap.style, { position:'absolute', right:'8px', bottom:'8px', display:'flex', flexDirection:'column', gap:'6px' });
+  const btnUp = document.createElement('button'); btnUp.className='btn'; btnUp.textContent='▲'; Object.assign(btnUp.style,{padding:'6px 10px'});
+  const btnDown = document.createElement('button'); btnDown.className='btn'; btnDown.textContent='▼'; Object.assign(btnDown.style,{padding:'6px 10px'});
+  ctrlWrap.appendChild(btnUp); ctrlWrap.appendChild(btnDown); area.appendChild(ctrlWrap);
+  btnUp.addEventListener('click', ()=>{ lane=Math.max(0,lane-1); placePlayer(); });
+  btnDown.addEventListener('click', ()=>{ lane=Math.min(2,lane+1); placePlayer(); });
+
+  // Tap en el área: tocar arriba/bajo mueve
+  function onTouchStart(ev){ if(!ev.touches || !ev.touches[0]) return; ev.preventDefault(); const rect=area.getBoundingClientRect(); const y=ev.touches[0].clientY-rect.top; const mid = rect.height/2; if(y < mid){ lane=Math.max(0,lane-1); } else { lane=Math.min(2,lane+1); } placePlayer(); }
+  area.addEventListener('touchstart', onTouchStart, { passive:false });
+
+  // Questions between phases
+  function askCheckpoint(next){
+    running=false;
+    const qbox = document.createElement('div'); qbox.className='game-card'; qbox.style.marginTop='10px'; qbox.innerHTML='<h3>Checkpoint</h3>';
+    const qtext = document.createElement('div'); const inp=document.createElement('input'); inp.className='resp'; const btn=document.createElement('button'); btn.className='btn'; btn.textContent='Continuar';
+    qbox.appendChild(qtext); qbox.appendChild(inp); qbox.appendChild(btn); card.appendChild(qbox);
+    // Use Level 2 generator for a bit more complejidad
+    const r = diff==='low'? 20 : (diff==='high'? 80 : 40);
+    const a=rnd(10,r), b=rnd(10,r), c=rnd(2,10);
+    const type=rnd(0,2);
+    let ans; if(type===0){ qtext.textContent=`${a}+${b}−${c} = ?`; ans=String(a+b-c);} else if(type===1){ qtext.textContent=`${a}×${c}−${b} = ?`; ans=String(a*c-b);} else { const d=rnd(2,10); const x=rnd(2,10); qtext.textContent=`(${d*x}÷${d})+${c} = ?`; ans=String(x+c);} 
+    btn.onclick=()=>{ exercises++; if((inp.value||'').trim()===ans){ card.removeChild(qbox); running=true; next(); } else { toast('Respuesta incorrecta'); }};
+  }
+
+  function updateHUD(){ const target=getTarget(); phaseEl.textContent=`Fase ${phase}/${PHASES}`; distEl.textContent=`Meta: ${Math.min(target, Math.floor(distance))}/${target}`; speedEl.textContent=`Velocidad: ${Math.round(speed)}px/s`; }
+
+  function resetPhase(){ obstacles.forEach(o=> area.removeChild(o.el)); obstacles=[]; distance=0; speed = 120 + (phase-1)*40; updateHUD(); }
+
+  let spawnAcc=0;
+  let phaseLocked=false; // evita múltiples disparos por fase
+  function tick(now){ if(finished){ return; } if(!running) { last=now; requestAnimationFrame(tick); return; } const dt=(now-last)/1000; last=now; const target=getTarget(); const prog = Math.min(1, distance/target); const phaseFactor = 1 + 0.3*(phase-1); const slow = 1/(1 + 0.8*prog*phaseFactor); distance += speed*dt*slow; spawnAcc += dt; if(spawnAcc> Math.max(0.35, 0.8 - (phase*0.1))){ spawnAcc=0; spawnObstacle(); }
+    // move obstacles
+    for(let i=obstacles.length-1;i>=0;i--){ const o=obstacles[i]; o.x -= speed*dt; o.el.style.right = Math.max(-40,o.x)+'px'; if(o.x < -40){ area.removeChild(o.el); obstacles.splice(i,1); continue; }
+      // colisión real por proximidad horizontal de centros
+      if(o.lane===lane){ const dx = Math.abs(obstacleCenterX(o) - playerCenterX()); if(dx < 24){ running=false; toast('Colisión, reiniciando fase'); setTimeout(()=>{ resetPhase(); running=true; }, 500); return requestAnimationFrame(tick); } }
+    }
+    updateHUD();
+    if(!phaseLocked && distance>=getTarget()){
+      phaseLocked = true;
+      if(phase<PHASES){ running=false; askCheckpoint(()=>{ phase++; resetPhase(); phaseLocked=false; running=true; }); }
+      else { // win
+        document.removeEventListener('keydown', onKey);
+        finished = true; running = false;
+        addMathStats(Date.now()-t0, exercises);
+        setMathState({});
+        saveLevelPassed(4); // marca nivel 3 como completado
+        // Overlay de felicitación (una sola vez)
+        const overlay = document.createElement('div');
+        Object.assign(overlay.style,{ position:'fixed', inset:'0', background:'rgba(10,6,20,.55)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:'2000' });
+        const box = document.createElement('div');
+        box.className='game-card';
+        box.style.maxWidth='520px'; box.style.textAlign='center';
+        box.innerHTML = `<h2>🎉 ¡Felicitaciones!</h2><p>Has completado las 6 fases del Nivel 3.</p>`;
+        const actions = document.createElement('div'); actions.style.marginTop='10px'; actions.style.display='flex'; actions.style.gap='8px'; actions.style.justifyContent='center';
+        const btnHome = document.createElement('button'); btnHome.className='btn'; btnHome.textContent='Volver al inicio'; btnHome.onclick=()=>{ window.location.href='Inicio.html'; };
+        const btnClose = document.createElement('button'); btnClose.className='btn'; btnClose.textContent='Cerrar'; btnClose.onclick=()=>{ document.body.removeChild(overlay); };
+        actions.appendChild(btnHome); actions.appendChild(btnClose); box.appendChild(actions);
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+      }
+    }
+    persist();
+    requestAnimationFrame(tick);
+  }
+
+  resetPhase(); updateHUD(); requestAnimationFrame(tick);
+}
+
+// Router
+function startByLevel(lv){ if(lv<=1) startLevel1(); else if(lv===2) startLevel2(); else startLevel3(); }
+startByLevel(currentLevel);
+</script>
+</body>
+</html>

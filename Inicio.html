@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Namiro</title>
+  <style>
+    :root {
+      --primary: #5a189a; /* deeper for contrast */
+      --primary-600: #6d28d9;
+      --primary-700: #5b21b6;
+      --primary-800: #3b0a77;
+      --bg: #faf9ff;
+      --surface: #ffffff;
+      --muted: #ede6ff;
+      --text: #140e26;
+      --text-soft: #2a1b4a;
+      --text-inverse: #ffffff;
+      --border: rgba(17, 12, 34, 0.12);
+      --radius: 12px;
+      --shadow: 0 6px 16px rgba(17, 12, 34, 0.12);
+      --font-size-base: 16px;
+    }
+    html, body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; }
+    html { font-size: var(--font-size-base); }
+    a { color: var(--primary-700); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: var(--text-inverse); }
+    nav { background: var(--primary-700); box-shadow: var(--shadow); }
+    nav a { color: var(--text-inverse) !important; border-radius: 8px; font-weight: 600; }
+    nav a:hover { background: var(--primary-600) !important; }
+    section, .container, .contact-card, .descarga-opciones, .contact-form, .contact-box { background: var(--surface) !important; border-radius: var(--radius) !important; box-shadow: var(--shadow) !important; border: 1px solid var(--border) !important; }
+    h1, h2, h3 { color: var(--primary-700); }
+    header, .site-header, nav, footer { color: var(--text-inverse) !important; }
+    header h1, header h2, header p, .site-header h1, .site-header h2, .site-header p, nav a, footer p { color: var(--text-inverse) !important; }
+    li strong, .contact-card p, .btn-playstore, .btn-appstore { color: var(--primary-700); }
+    button, .btn, input[type="submit"], .social-button { background: var(--primary-600) !important; color: var(--text-inverse) !important; border: none !important; border-radius: 10px !important; padding: 10px 16px !important; cursor: pointer !important; transition: filter .2s ease, transform .12s ease, box-shadow .2s ease; }
+    button:hover, .btn:hover, input[type="submit"]:hover, .social-button:hover, .btn-playstore:hover, .btn-appstore:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 8px 18px rgba(17, 12, 34, 0.18); }
+    input, textarea, select, .resp, .controls { border: 1.5px solid var(--primary-600) !important; border-radius: 10px !important; background: var(--surface) !important; color: var(--text) !important; }
+    footer { background: var(--primary-700) !important; color: var(--text-inverse) !important; }
+    .boton, .boton-abajo { background: var(--primary-600) !important; }
+    .message { background: var(--muted) !important; color: var(--text-soft) !important; border-radius: var(--radius) !important; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 16px; }
+    .grid { display: grid; gap: 16px; }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .progress { width: 100%; height: 10px; background: #eee; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+    .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--primary-600), var(--primary)); width: 0%; transition: width .6s ease; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeInUp .4s ease both; }
+    .fab { position: fixed !important; right: 16px !important; top: 16px !important; bottom: auto !important; left: auto !important; z-index: 1000 !important; width: 56px; height: 56px; border-radius: 50%; background: var(--primary-600); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(17,12,34,.18); border: none; }
+    .fab:hover { filter: brightness(1.06); transform: translateY(-1px); }
+    .drawer-backdrop { position: fixed; inset: 0; background: rgba(10, 6, 20, .36); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+    .drawer { position: fixed; top: 0; right: -360px; width: 360px; max-width: 90%; height: 100vh; background: var(--surface); box-shadow: -4px 0 20px rgba(0,0,0,.12); border-left: 1px solid var(--border); transition: right .28s ease; display: flex; flex-direction: column; }
+    .drawer.open { right: 0; }
+    .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+    .drawer header { padding: 16px; background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: #fff; }
+    .drawer header h3 { color: #fffbeb !important; }
+    .drawer .content { padding: 16px; overflow: auto; flex: 1; }
+    .toast { position: fixed; right: 20px; bottom: 20px; transform: translateY(12px); background: var(--primary-700); color: #fff; padding: 8px 12px; border-radius: 8px; opacity: 0; transition: .22s ease; box-shadow: 0 10px 24px rgba(0,0,0,.18); font-size: 13px; max-width: 80vw; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .ripple { position: relative; overflow: hidden; }
+    .ripple::after { content: ""; position: absolute; border-radius: 50%; transform: scale(0); background: rgba(255,255,255,.35); opacity: 0; pointer-events: none; }
+    .no-anim *, .no-anim *::before, .no-anim *::after { transition: none !important; animation: none !important; }
+    [data-theme="dark"] { --bg: #0f0a1a; --surface: #171022; --muted: #1f1530; --text: #ece8f5; --text-soft: #cfc4e8; --text-inverse: #ffffff; --border: rgba(236, 232, 245, 0.12); --shadow: 0 8px 20px rgba(0,0,0,.35); --primary: #7c3aed; --primary-600: #7c3aed; --primary-700: #6d28d9; --primary-800: #4c1d95; }
+    [data-theme="dark"] header { background: linear-gradient(90deg, #2b0f58, var(--primary-600)); }
+    [data-theme="dark"] nav { background: #2b0f58; }
+    [data-theme="dark"] footer { background: #2b0f58 !important; }
+    .switch { position: relative; width: 44px; height: 24px; background: #e5e7eb; border-radius: 999px; cursor: pointer; transition: background .2s ease; border: 1px solid var(--border); }
+    .switch .thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,.2); transition: left .2s ease, background .2s ease; }
+    .switch.on { background: var(--primary-600); }
+    .switch.on .thumb { left: 22px; background: #111827; }
+    .switch.on .thumb .icon-moon { color: #f5f5f5 !important; }
+    .segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
+    .segmented button { border: none; background: transparent; padding: 8px 12px; cursor: pointer; color: var(--text); transition: background .18s ease, color .18s ease; font-weight: 600; }
+    .segmented button + button { border-left: 1px solid var(--border); }
+    .segmented button:hover { background: var(--muted); }
+    .segmented button:active { transform: none; }
+    .segmented button.active { background: color-mix(in srgb, var(--primary-600) 14%, transparent); color: var(--primary-700); }
+    [data-theme="dark"] .switch { background: #1f2937; border-color: var(--border); }
+    [data-theme="dark"] .segmented { background: var(--surface); }
+    /* Dark mode modal adjustments */
+    [data-theme="dark"] .modal-backdrop { background: rgba(10,6,20,.6); }
+    [data-theme="dark"] .dialog .hero .top-bar { background:#1f1b2a; color:#e5e7eb; }
+    [data-theme="dark"] .dialog .hero .bottom-fade { background: linear-gradient(to top, color-mix(in srgb, var(--primary-600) 40%, #0f0a1a) 0%, rgba(15,10,26,.82) 60%, transparent 100%); }
+    .tabs { display: flex; gap: 8px; padding: 8px 16px; border-bottom: 1px solid var(--border); }
+    .tabs .tab-btn { border: none; background: transparent; color: var(--text); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+    .tabs .tab-btn.active { background: var(--muted); }
+    @keyframes slideInX { from { opacity:.0; transform: translateX(6px);} to{ opacity:1; transform:none;} }
+    .slide-in { animation: slideInX .25s ease both; }
+  </style>
+  <style>
+    :root {
+      --main: #6b21a8;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background-color: var(--main);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .container {
+      padding: 1rem;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 0.7rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: var(--main);
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .card {
+      background: var(--surface);
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      margin: 1rem 0;
+    }
+
+    .card h3 {
+      margin-top: 0;
+    }
+    /* Games full-width header */
+    .games-header { width: 100%; background: var(--surface); border-bottom: 1px solid var(--border); box-shadow: var(--shadow); }
+    .games-header .wrap { max-width: 980px; margin: 0 auto; padding: 16px; }
+    .games-header h2 { margin: 0 0 8px 0; }
+    /* Category tabs styling */
+    .games-header .tabs { gap: 16px; padding: 0; border: none; }
+    .games-header .tabs .tab-btn { background: var(--primary-600); color: #fff; padding: 10px 18px; border-radius: 999px; box-shadow: 0 6px 16px rgba(17,12,34,.12); transition: filter .18s ease, transform .12s ease, background .18s ease; }
+    .games-header .tabs .tab-btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
+    .games-header .tabs .tab-btn.active { background: var(--primary-800); }
+    /* Tiles */
+    .tiles-grid { width: 100%; max-width: 100%; margin: 0; padding: 12px; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, 200px); justify-content: center; }
+    .game-tile { position: relative; display: flex; align-items: center; justify-content: center; text-align: center; width: 200px; height: 200px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface) center/cover no-repeat; box-shadow: var(--shadow); font-weight: 700; cursor: pointer; transition: transform .15s ease, box-shadow .2s ease, background .2s ease; overflow: hidden; color: var(--text); }
+    .game-tile:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(17,12,34,.16); }
+    .game-tile small { display:none; }
+    .game-tile .tile-label { display:none; }
+    .game-tile .tile-fade { display:none; }
+    .tile-icon { width: 40px; height: 40px; border-radius: 50%; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, var(--primary-600), var(--primary)); box-shadow: 0 6px 16px rgba(17,12,34,.15); }
+    .tile-icon svg { width: 22px; height: 22px; color: #fff; }
+    .tile-caption { position:absolute; bottom:8px; left:0; right:0; text-align:center; font-size:12px; font-weight:700; color: var(--primary-700); pointer-events:none; }
+    [data-theme="dark"] .tile-caption { color:#cfc4e8; }
+    /* Modal */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(10,6,20,.45); opacity: 0; pointer-events: none; transition: opacity .22s ease; z-index: 2000; }
+    .modal-backdrop.show { opacity: 1; pointer-events: auto; }
+    .modal { position: fixed; inset: 0; display: grid; place-items: center; pointer-events: none; z-index: 2001; }
+    .modal .dialog { width: min(720px, 96vw); background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 24px 48px rgba(0,0,0,.22); transform: scale(.96) translateY(6px); opacity: 0; transition: transform .22s ease, opacity .22s ease; padding: 16px; overflow:hidden; }
+    .dialog .hero { position: relative; height: 260px; border-radius: 0; background: #eee center/cover no-repeat; overflow: hidden; margin: -16px -16px 12px -16px; }
+    .dialog .hero .top-bar { position:absolute; top:0; left:0; right:0; background:#fff; color: var(--primary-700); font-weight: 900; padding: 10px 14px; }
+    .dialog .hero .bottom-fade { position:absolute; left:0; right:0; bottom:0; height:52%; background: linear-gradient(to top, color-mix(in srgb, var(--primary-600) 26%, #ffffff) 0%, rgba(255,255,255,.8) 60%, transparent 100%); }
+    .modal.show { pointer-events: auto; }
+    .modal.show .dialog { transform: scale(1) translateY(0); opacity: 1; }
+    .dialog h3 { margin: 0 0 6px 0; color: var(--primary-700); }
+    .dialog p { margin: 0 0 12px 0; color: var(--text); }
+    .dialog .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .dialog .actions .btn { width: 100%; background: var(--primary-600) !important; color: #fff !important; border: none !important; box-shadow: none !important; border-radius: 0; }
+    .dialog .actions .btn:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; }
+    .dialog .actions .btn:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; }
+    .dialog .actions .btn:hover { filter: brightness(1.08); }
+    /* Social levels (flip cards) */
+    .levels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; padding: 8px 4px; }
+    .level-card { perspective: 1000px; }
+    .level-card .inner { position: relative; width: 100%; height: 160px; transition: transform .6s; transform-style: preserve-3d; }
+    .level-card.flipped .inner { transform: rotateY(180deg); }
+    .level-card .face { position:absolute; inset:0; backface-visibility: hidden; border-radius: 12px; display:flex; align-items:center; justify-content:center; text-align:center; padding: 12px; }
+    .level-card .front { background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow), inset 0 0 0 2px var(--primary-600), inset 0 0 0 6px var(--surface), inset 0 0 0 10px var(--primary-600); color: var(--primary-700); }
+    .level-card .front .icon { width: 42px; height: 42px; border-radius: 50%; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, var(--primary-600), var(--primary)); color:#fff; box-shadow: 0 6px 16px rgba(17,12,34,.2); }
+    .level-card .front .icon svg { width: 24px; height: 24px; }
+    .level-card .back { background: var(--muted); border: 1px solid var(--border); transform: rotateY(180deg); color: var(--text); }
+    .level-card .status { position:absolute; top:8px; right:8px; font-size: 11px; font-weight:700; background: color-mix(in srgb, var(--primary-600) 16%, transparent); color: var(--primary-700); padding: 4px 6px; border-radius: 6px; }
+    .level-card.locked { filter: grayscale(0.6) opacity(0.75); }
+    .level-card.locked .front { cursor: not-allowed; }
+    .level-card.current .front { cursor: pointer; }
+    [data-theme="dark"] .level-card .back { background: #1f1530; }
+  </style>
+  <script>
+    (function(){
+      try {
+        const s = localStorage.getItem('session');
+        if(!s){ window.location.href = 'welcome-form.html'; }
+      } catch(e){}
+    })();
+  </script>
+</head>
+<body>
+
+<header>
+  <h1>Namiro</h1>
+  <p>Desarrolla tu mente con juegos inteligentes</p>
+</header>
+
+<section class="games-header">
+  <div class="wrap">
+    <h2 class="fade-in">Elige un juego</h2>
+    <div class="tabs" aria-label="Categorías de juegos">
+      <button id="tabCatAcad" class="tab-btn active" type="button">Académicas</button>
+      <button id="tabCatBland" class="tab-btn" type="button">Blandas</button>
+    </div>
+  </div>
+</section>
+
+<div class="tiles-grid" aria-live="polite">
+  <div class="game-tile fade-in" data-category="academicas" data-title="Matemáticas Dinámicas" data-desc="Desafía tu lógica con cuentas rápidas." data-link="juego_matematico.html" data-img="https://cdn.milenio.com/uploads/media/2022/03/14/este-lunes-es-el-dia.jpg" data-label="Juego matemático" aria-label="Matemáticas Dinámicas">
+    <div class="tile-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="5" x2="19" y2="19" />
+        <line x1="19" y1="5" x2="5" y2="19" />
+      </svg>
+    </div>
+    <span class="tile-caption">Matemáticas</span>
+  </div>
+  <div class="game-tile fade-in" data-category="academicas" data-title="Memoria de Secuencias" data-desc="Recuerda y repite secuencias numéricas." data-link="Memoria.html" data-img="https://www.lavozdegalicia.es/default/2022/12/19/00121671469964202335143/Foto/memoria.png" data-label="Memoria de secuencias" aria-label="Memoria de Secuencias">
+    <div class="tile-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="4" width="6" height="6" rx="1"/>
+        <rect x="14" y="4" width="6" height="6" rx="1"/>
+        <rect x="4" y="14" width="6" height="6" rx="1"/>
+        <rect x="14" y="14" width="6" height="6" rx="1"/>
+      </svg>
+    </div>
+    <span class="tile-caption">Memoria</span>
+  </div>
+  <div class="game-tile fade-in" data-category="blandas" data-title="Habilidades Social" data-desc="Reto de 6 días: abre una carta diaria y cumple la misión para mejorar tus habilidades sociales." data-link="Sociales.html?play=1" data-img="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1600&auto=format&fit=crop" data-label="Habilidades social" aria-label="Habilidades Social">
+    <div class="tile-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a4 4 0 0 1-4 4H8l-4 4v-8a4 4 0 0 1 4-4h9a4 4 0 0 1 4 4z"/>
+        <path d="M17 7a4 4 0 0 0-4-4H7L3 1v6a4 4 0 0 0 4 4"/>
+      </svg>
+    </div>
+    <span class="tile-caption">Social</span>
+  </div>
+  <div class="game-tile fade-in" data-category="blandas" data-title="Pensamiento Crítico" data-desc="Analiza, evalúa y resuelve problemas con criterio propio." data-link="#" data-img="https://thumbnails.genially.com/5ea9d7907851fa3a51f4d21e/screenshots/38872db8-2491-4893-b93e-982daf8ed702.jpg" data-label="Pensamiento crítico" aria-label="Pensamiento Crítico">
+    <div class="tile-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </div>
+    <span class="tile-caption">Crítico</span>
+  </div>
+</div>
+
+<!-- FAB + Drawer + Backdrop -->
+<button id="fabProfile" class="fab ripple" title="Perfil & Progreso" style="position:fixed; top:16px; right:16px; left:auto; bottom:auto; z-index:1000;">☰</button>
+<div id="drawerBackdrop" class="drawer-backdrop"></div>
+<aside id="drawer" class="drawer" aria-hidden="true">
+  <header>
+    <h3 style="margin:0">Tu perfil y progreso</h3>
+  </header>
+  <div class="tabs">
+    <button id="tabProgress" class="tab-btn active" type="button">Progreso</button>
+    <button id="tabSettings" class="tab-btn" type="button">Ajustes</button>
+  </div>
+  <div class="content">
+    <section id="drawerProgress" class="slide-in">
+      <div class="card" style="box-shadow:none">
+        <p id="d_profileName" style="margin:.2rem 0; font-weight:700; color:var(--primary-700)">Usuario</p>
+        <p id="d_profileEmail" style="margin:.2rem 0; color:#aaa"></p>
+      </div>
+      <div class="card" style="box-shadow:none">
+        <p style="margin:0 0 6px 0; font-weight:600">🧮 Matemáticas</p>
+        <div class="progress"><span id="d_progMath"></span></div>
+        <small id="d_progMathText">0%</small>
+      </div>
+      <div class="card" style="box-shadow:none">
+        <p style="margin:0 0 6px 0; font-weight:600">🔢 Memoria</p>
+        <div class="progress"><span id="d_progMem"></span></div>
+        <small id="d_progMemText">0%</small>
+      </div>
+      <div class="card" style="box-shadow:none">
+        <p style="margin:0 0 6px 0; font-weight:600">🗣️ Sociales</p>
+        <div class="progress"><span id="d_progCom"></span></div>
+        <small id="d_progComText">0%</small>
+      </div>
+    </section>
+
+    <section id="drawerSettings" style="display:none;">
+      <div class="card" style="box-shadow:none; margin-top:12px">
+        <h4 style="margin:0 0 8px 0">Ajustes</h4>
+        <div style="display:grid; gap:12px; text-align:left">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px">
+            <span>Modo oscuro</span>
+            <div id="switchDark" class="switch" role="switch" aria-checked="false" tabindex="0">
+              <div class="thumb">
+                <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute; inset:0; margin:auto; color:#f59e0b;">
+                  <circle cx="12" cy="12" r="4"></circle>
+                  <line x1="12" y1="1" x2="12" y2="3"></line>
+                  <line x1="12" y1="21" x2="12" y2="23"></line>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                  <line x1="1" y1="12" x2="3" y2="12"></line>
+                  <line x1="21" y1="12" x2="23" y2="12"></line>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute; inset:0; margin:auto; color:#e5e7eb; display:none;">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px">
+            <span>Tamaño de letra</span>
+            <div id="segFont" class="segmented" role="tablist" aria-label="Tamaño de letra">
+              <button data-size="14" role="tab" title="Tamaño pequeño">A</button>
+              <button data-size="16" role="tab" class="active" title="Tamaño mediano">AA</button>
+              <button data-size="18" role="tab" title="Tamaño grande">AAA</button>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px">
+            <span>Reducir animaciones</span>
+            <div id="switchMotion" class="switch" role="switch" aria-checked="false" tabindex="0"><div class="thumb"></div></div>
+          </div>
+
+          <div style="margin-top:8px; display:flex; justify-content:flex-end">
+            <button id="btnLogout" class="btn" type="button" style="background:#ef4444 !important">Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div style="padding:16px">
+    <button id="closeDrawer" class="btn ripple" style="width:100%">Cerrar</button>
+  </div>
+  </aside>
+
+<!-- Game Modal -->
+<div id="gameModalBackdrop" class="modal-backdrop"></div>
+<div id="gameModal" class="modal" aria-hidden="true">
+  <div class="dialog">
+    <div id="gmHero" class="hero">
+      <div class="top-bar" id="gmTopLabel">Juego</div>
+      <div class="bottom-fade"></div>
+    </div>
+    <h3 id="gmTitle">Título</h3>
+    <p id="gmDesc">Descripción</p>
+    <small id="gmInstr" style="display:none; color: var(--text-soft);">Indicaciones: abre una carta por día; al abrirla, queda disponible para revisarla en cualquier momento.</small>
+    <div id="gmLevels" style="display:none; margin: 8px 0 10px 0;">
+      <div class="levels-grid" id="levelsGrid"></div>
+      <small id="levelsHint" style="display:block; margin-top:6px; color:var(--text-soft)">Abre una carta cada 24 horas.</small>
+    </div>
+    <div class="actions">
+      <button id="gmClose" class="btn">Regresar</button>
+      <button id="gmPlay" class="btn">Jugar</button>
+    </div>
+  </div>
+  </div>
+
+<script>
+  // Ripple effect util
+  document.addEventListener('click', function(e){
+    const t = e.target.closest('.ripple');
+    if(!t) return;
+    const rect = t.getBoundingClientRect();
+    const d = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - d/2;
+    const y = e.clientY - rect.top - d/2;
+    const wave = document.createElement('span');
+    wave.style.position='absolute';wave.style.borderRadius='50%';
+    wave.style.pointerEvents='none';wave.style.width=wave.style.height=d+'px';
+    wave.style.left=x+'px';wave.style.top=y+'px';
+    wave.style.background='rgba(255,255,255,.35)';
+    wave.style.transform='scale(0)';wave.style.opacity='0.9';
+    wave.style.transition='transform .45s ease, opacity .6s ease';
+    t.style.position='relative'; t.appendChild(wave);
+    requestAnimationFrame(()=>{ wave.style.transform='scale(1.8)'; wave.style.opacity='0'; });
+    setTimeout(()=> wave.remove(), 650);
+  });
+
+  // Drawer logic and data binding
+  (function(){
+    const fab = document.getElementById('fabProfile');
+    const drawer = document.getElementById('drawer');
+    const backdrop = document.getElementById('drawerBackdrop');
+    const closeBtn = document.getElementById('closeDrawer');
+
+    function openDrawer(){ drawer.classList.add('open'); backdrop.classList.add('show'); drawer.setAttribute('aria-hidden','false'); }
+    function closeDrawer(){ drawer.classList.remove('open'); backdrop.classList.remove('show'); drawer.setAttribute('aria-hidden','true'); }
+
+    fab.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+
+    // Bind profile
+    try {
+      const name = localStorage.getItem('profileName') || 'Usuario';
+      const email = localStorage.getItem('profileEmail') || '';
+      document.getElementById('d_profileName').textContent = name;
+      document.getElementById('d_profileEmail').textContent = email;
+    } catch(e) {}
+
+    // Compute progress strictly per account
+    const MATH_TOTAL = 5;
+    const MEM_TOTAL_LEVELS = 5, MEM_TYPES = 3;
+    const COM_TOTAL = 2; // kept for legacy level display
+    let mathLevel = 0, memLevel = 0, memGameIndex = 0, comLevel = 0;
+    try {
+      const session = localStorage.getItem('session');
+      let users = {};
+      try { users = JSON.parse(localStorage.getItem('users_db')||'{}'); } catch(e){ users = {}; }
+      const prog = session && users[session] && users[session].progress ? users[session].progress : {};
+      if(prog.math && Number.isFinite(prog.math.level)) mathLevel = Math.min(prog.math.level, MATH_TOTAL);
+      if(prog.memory){
+        memLevel = Math.max(0, Math.min(MEM_TOTAL_LEVELS, prog.memory.level || prog.memory.levelIndex || 0));
+        memGameIndex = Math.max(0, prog.memory.gameIndex || 0);
+      }
+      if(prog.communication && Number.isFinite(prog.communication.level)) comLevel = Math.min(prog.communication.level, COM_TOTAL);
+    } catch(e){}
+    const mathPct = Math.round((mathLevel / MATH_TOTAL) * 100);
+    document.getElementById('d_progMath').style.width = mathPct + '%';
+    document.getElementById('d_progMathText').textContent = mathPct + '%';
+    const memDone = (memLevel * MEM_TYPES) + (memGameIndex % MEM_TYPES);
+    const memTotal = MEM_TOTAL_LEVELS * MEM_TYPES;
+    const memPct = Math.round((Math.min(memDone, memTotal) / memTotal) * 100);
+    document.getElementById('d_progMem').style.width = memPct + '%';
+    document.getElementById('d_progMemText').textContent = memPct + '%';
+    // Social progress percent based on cards opened (index/6). Prefer per-user social.index
+    let comPct = 0;
+    try {
+      const session = localStorage.getItem('session');
+      let users = {};
+      try { users = JSON.parse(localStorage.getItem('users_db')||'{}'); } catch(e){ users = {}; }
+      const prog = session && users[session] && users[session].progress ? users[session].progress : {};
+      const socialIdx = prog.social && Number.isFinite(prog.social.index) ? Math.max(0, Math.min(6, prog.social.index)) : null;
+      if(socialIdx !== null) comPct = Math.round((socialIdx/6)*100);
+      else if(prog.communication && Number.isFinite(prog.communication.pct)) comPct = Math.max(0, Math.min(100, Math.round(prog.communication.pct)));
+      else comPct = Math.round((comLevel / COM_TOTAL) * 100);
+    } catch(e) { comPct = Math.round((comLevel / COM_TOTAL) * 100); }
+    document.getElementById('d_progCom').style.width = comPct + '%';
+    document.getElementById('d_progComText').textContent = comPct + '%';
+
+    // Snapshot progress per account (merge, do not overwrite)
+    try {
+      const session = localStorage.getItem('session');
+      if(session){
+        let users = {};
+        try { users = JSON.parse(localStorage.getItem('users_db')||'{}'); } catch(e){ users = {}; }
+        users[session] = users[session] || {};
+        const prevProg = (users[session].progress && typeof users[session].progress === 'object') ? users[session].progress : {};
+        users[session].progress = Object.assign({}, prevProg, {
+          math: { level: mathLevel, pct: mathPct },
+          memory: { level: memLevel, gameIndex: memGameIndex, pct: memPct },
+          communication: { level: comLevel, pct: comPct }
+        });
+        localStorage.setItem('users_db', JSON.stringify(users));
+      }
+    } catch(e){}
+
+    // Settings: load & bind
+    const swDark = document.getElementById('switchDark');
+    const segFont = document.getElementById('segFont');
+    const swMotion = document.getElementById('switchMotion');
+    const btnLogout = document.getElementById('btnLogout');
+
+    function applyTheme(theme){
+      const root = document.documentElement;
+      if(theme === 'dark') root.setAttribute('data-theme','dark');
+      else root.removeAttribute('data-theme');
+    }
+    function applyFontSize(sz){
+      const v = (Number(sz)||16) + 'px';
+      document.documentElement.style.setProperty('--font-size-base', v);
+    }
+    function applyMotion(disable){
+      const body = document.body;
+      if(disable) body.classList.add('no-anim'); else body.classList.remove('no-anim');
+    }
+    function setSwitch(el, on){ el.classList.toggle('on', !!on); el.setAttribute('aria-checked', on? 'true':'false'); }
+    function setSegFont(sz){
+      const btns = segFont.querySelectorAll('button');
+      btns.forEach(b=> b.classList.toggle('active', String(b.dataset.size)===String(sz)));
+    }
+
+    function loadSettings(){
+      try {
+        const s = JSON.parse(localStorage.getItem('app_settings')||'{}');
+        const isDark = s.theme === 'dark';
+        const fz = String(s.fontSize||16);
+        const rm = !!s.reduceMotion;
+        setSwitch(swDark, isDark); applyTheme(isDark? 'dark':'light');
+        setSegFont(fz); applyFontSize(fz);
+        setSwitch(swMotion, rm); applyMotion(rm);
+      } catch(e) {
+        // defaults
+      }
+    }
+    function persist(s){
+      try {
+        localStorage.setItem('app_settings', JSON.stringify(s));
+        const session = localStorage.getItem('session');
+        if(session){
+          let users = {};
+          try { users = JSON.parse(localStorage.getItem('users_db')||'{}'); } catch(e){ users = {}; }
+          users[session] = users[session] || {};
+          users[session].settings = { theme: s.theme, fontSize: s.fontSize, reduceMotion: s.reduceMotion };
+          localStorage.setItem('users_db', JSON.stringify(users));
+        }
+      } catch(e){}
+    }
+    function currentSettings(){
+      const theme = swDark.classList.contains('on') ? 'dark' : 'light';
+      const activeBtn = segFont.querySelector('button.active');
+      const fontSize = Number(activeBtn ? activeBtn.dataset.size : 16) || 16;
+      const reduceMotion = swMotion.classList.contains('on');
+      return { theme, fontSize, reduceMotion };
+    }
+    function notify(msg){ const t=document.createElement('div'); t.className='toast show'; t.textContent=msg||'Listo'; document.body.appendChild(t); setTimeout(()=>t.classList.remove('show'), 900); setTimeout(()=>t.remove(), 1300); }
+
+    // Instant interactions
+    function updateDarkIcons(){
+      const thumb = swDark.querySelector('.thumb');
+      const sun = thumb.querySelector('.icon-sun');
+      const moon = thumb.querySelector('.icon-moon');
+      const isOn = swDark.classList.contains('on');
+      sun.style.display = isOn ? 'none' : 'block';
+      moon.style.display = isOn ? 'block' : 'none';
+    }
+    swDark.addEventListener('click', ()=>{ swDark.classList.toggle('on'); updateDarkIcons(); const s=currentSettings(); applyTheme(s.theme); persist(s); notify(s.theme==='dark'?'Modo oscuro':'Modo claro'); });
+    swDark.addEventListener('keydown', (e)=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); swDark.click(); }});
+    swMotion.addEventListener('click', ()=>{ swMotion.classList.toggle('on'); const s=currentSettings(); applyMotion(s.reduceMotion); persist(s); });
+    swMotion.addEventListener('keydown', (e)=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); swMotion.click(); }});
+    segFont.addEventListener('click', (e)=>{
+      const btn=e.target.closest('button'); if(!btn) return; segFont.querySelectorAll('button').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); const s=currentSettings(); applyFontSize(s.fontSize); persist(s); });
+    loadSettings(); updateDarkIcons();
+
+    // Logout: clear session and go to welcome form
+    if(btnLogout){
+      btnLogout.addEventListener('click', ()=>{
+        try { localStorage.removeItem('session'); } catch(e){}
+        window.location.href = 'welcome-form.html';
+      });
+    }
+
+    // Tabs (Progreso / Ajustes)
+    const tabProgress = document.getElementById('tabProgress');
+    const tabSettings = document.getElementById('tabSettings');
+    const drawerProgress = document.getElementById('drawerProgress');
+    const drawerSettings = document.getElementById('drawerSettings');
+    function showTab(which){
+      if(which==='progress'){
+        tabProgress.classList.add('active');
+        tabSettings.classList.remove('active');
+        drawerSettings.style.display='none';
+        drawerProgress.style.display='block';
+        drawerProgress.classList.remove('slide-in');
+        void drawerProgress.offsetWidth; // reflow
+        drawerProgress.classList.add('slide-in');
+      } else {
+        tabSettings.classList.add('active');
+        tabProgress.classList.remove('active');
+        drawerProgress.style.display='none';
+        drawerSettings.style.display='block';
+        drawerSettings.classList.remove('slide-in');
+        void drawerSettings.offsetWidth;
+        drawerSettings.classList.add('slide-in');
+      }
+    }
+    tabProgress.addEventListener('click', ()=> showTab('progress'));
+    tabSettings.addEventListener('click', ()=> showTab('settings'));
+
+    // Category filter (Académicas / Blandas)
+    const btnAcad = document.getElementById('tabCatAcad');
+    const btnBland = document.getElementById('tabCatBland');
+    const gameTiles = Array.from(document.querySelectorAll('.game-tile'));
+
+    function showCategory(cat){
+      gameTiles.forEach(tile=>{
+        const c = tile.dataset.category;
+        if(!c){ tile.style.display=''; return; }
+        tile.style.display = (c === cat) ? '' : 'none';
+      });
+      if(cat==='academicas'){
+        btnAcad.classList.add('active');
+        btnBland.classList.remove('active');
+        btnAcad.setAttribute('aria-pressed','true');
+        btnBland.setAttribute('aria-pressed','false');
+      } else {
+        btnBland.classList.add('active');
+        btnAcad.classList.remove('active');
+        btnBland.setAttribute('aria-pressed','true');
+        btnAcad.setAttribute('aria-pressed','false');
+      }
+      try { localStorage.setItem('selected_category', cat); } catch(e){}
+    }
+    if(btnAcad && btnBland){
+      btnAcad.addEventListener('click', ()=> showCategory('academicas'));
+      btnBland.addEventListener('click', ()=> showCategory('blandas'));
+      let initialCat = 'academicas';
+      try { initialCat = localStorage.getItem('selected_category') || 'academicas'; } catch(e){}
+      showCategory(initialCat);
+    }
+
+    // Modal logic for tiles
+    const modal = document.getElementById('gameModal');
+    const modalBackdrop = document.getElementById('gameModalBackdrop');
+    const mTitle = document.getElementById('gmTitle');
+    const mDesc = document.getElementById('gmDesc');
+    const mPlay = document.getElementById('gmPlay');
+    const mClose = document.getElementById('gmClose');
+    const mHero = document.getElementById('gmHero');
+    const mTopLabel = document.getElementById('gmTopLabel');
+    const mInstr = document.getElementById('gmInstr');
+    const mLevels = document.getElementById('gmLevels');
+    const levelsGrid = document.getElementById('levelsGrid');
+    const levelsHint = document.getElementById('levelsHint');
+
+    // Social: 6-day daily unlock flip cards
+    const SOCIAL_KEY = 'social_levels_state';
+    const SOCIAL_MISSIONS = [
+      'Día 1: Sal a la calle y di “Buenos días” a una persona.',
+      'Día 2: Repite el saludo con al menos 3 personas distintas.',
+      'Día 3: Ve a un comercio y compra algo sencillo.',
+      'Día 4: Inicia una breve charla (2-3 frases) con un conocido.',
+      'Día 5: Ve a un parque y preséntate a alguien nuevo.',
+      'Día 6: Entabla una conversación con alguien al azar en la calle.'
+    ];
+    function nowMs(){ return Date.now(); }
+    function loadSocialState(){
+      try {
+        const s = JSON.parse(localStorage.getItem(SOCIAL_KEY)||'{}');
+        const idx = Number.isFinite(s.index)? s.index : 0;
+        const last = Number.isFinite(s.lastCompletedAt)? s.lastCompletedAt : 0;
+        return { index: Math.max(0, Math.min(6, idx)), lastCompletedAt: last };
+      } catch(e){ return { index:0, lastCompletedAt:0 }; }
+    }
+    function saveSocialState(st){ try { localStorage.setItem(SOCIAL_KEY, JSON.stringify(st)); } catch(e){} }
+    function msToHH(mm){
+      const hrs = Math.floor(mm/3600000); const mins = Math.floor((mm%3600000)/60000);
+      return `${hrs}h ${mins}m`;
+    }
+    function canOpenCurrent(st){
+      if(st.index>=6) return false; // finished
+      if(!st.lastCompletedAt) return true; // first time
+      const diff = nowMs() - st.lastCompletedAt;
+      return diff >= 24*60*60*1000;
+    }
+    function renderSocial(){
+      const st = loadSocialState();
+      const allowed = canOpenCurrent(st);
+      levelsGrid.innerHTML = '';
+      for(let i=0;i<6;i++){
+        const card = document.createElement('div');
+        card.className = 'level-card'+(i<st.index? ' completed flipped':'')+(i===st.index? (allowed?' current':' locked'):'')+(i>st.index? ' locked':'');
+        const inner = document.createElement('div'); inner.className='inner';
+        const front = document.createElement('div'); front.className='face front';
+        const back = document.createElement('div'); back.className='face back';
+        // front content: nice margin rings + icon and level label
+        const frontWrap = document.createElement('div');
+        const icon = document.createElement('div'); icon.className='icon'; icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-4 4v-8a4 4 0 0 1 4-4h9a4 4 0 0 1 4 4z"/></svg>';
+        const lbl = document.createElement('div'); lbl.style.marginTop='10px'; lbl.style.fontWeight='800'; lbl.style.color='var(--primary-700)'; lbl.textContent = `Nivel ${i+1}`;
+        frontWrap.appendChild(icon); frontWrap.appendChild(lbl); front.appendChild(frontWrap);
+        // status pill
+        const status = document.createElement('div'); status.className='status';
+        status.textContent = (i<st.index)? 'Completado' : (i===st.index? (allowed? 'Disponible':'Bloqueado') : 'Bloqueado');
+        front.appendChild(status);
+        // back content: mission
+        back.innerHTML = `<div style="font-weight:600;">${SOCIAL_MISSIONS[i]}</div>`;
+        inner.appendChild(front); inner.appendChild(back); card.appendChild(inner);
+        if(i===st.index){
+          if(allowed){
+            front.addEventListener('click', ()=>{
+              card.classList.add('flipped');
+              // mark as completed immediately after flip
+              const ns = loadSocialState();
+              ns.index = Math.min(6, (ns.index||0)+1);
+              ns.lastCompletedAt = nowMs();
+              saveSocialState(ns);
+              setTimeout(()=>{ renderSocial(); }, 400);
+            });
+          } else {
+            const remaining = (24*60*60*1000) - (nowMs() - st.lastCompletedAt);
+            levelsHint.textContent = `Nueva carta disponible en ${msToHH(Math.max(0, remaining))}.`;
+          }
+        }
+        levelsGrid.appendChild(card);
+      }
+      if(st.index>=6){ levelsHint.textContent = '¡Completaste los 6 niveles!'; }
+    }
+
+    function enterSocialLevels(){
+      mHero.style.display = 'none';
+      document.querySelector('.dialog .actions').style.display = 'none';
+      mInstr.style.display = 'none';
+      mLevels.style.display = 'block';
+      levelsHint.textContent = 'Abre una carta cada 24 horas.';
+      renderSocial();
+    }
+
+    function openModal(title, desc, link, img, label){
+      mTitle.textContent = title || '';
+      mDesc.textContent = desc || '';
+      // Default: hero + actions
+      mHero.style.display = '';
+      document.querySelector('.dialog .actions').style.display = 'grid';
+      mLevels.style.display = 'none';
+      mInstr.style.display = 'none';
+      // Swap actions: left button will Play, right button will Close
+      mClose.textContent = 'Jugar';
+      mPlay.textContent = 'Regresar';
+      const isSocial = (label || title || '').toLowerCase() === 'habilidades sociales' || (label||title||'').toLowerCase()==='habilidades social';
+      const isMath = (label||title||'').toLowerCase().includes('matem') || (label||'').toLowerCase().includes('juego matemático');
+      if(isSocial){
+        mClose.onclick = ()=>{ window.location.href = link || 'Sociales.html'; };
+        mPlay.onclick = ()=>{ closeModal(); };
+      } else if(isMath){
+        // First click on Jugar opens level selector; then Continue navigates with chosen level
+        mClose.onclick = ()=>{
+          // Build inline slider UI
+          mInstr.innerHTML = `
+            <div style="margin:8px 0 4px 0; font-weight:700; color: var(--primary-700)">¿Qué tan bueno eres para matemáticas?</div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:12px;">Bajo</span>
+              <input id="mathLevelSlider" type="range" min="0" max="2" step="1" value="1" style="flex:1"> 
+              <span style="font-size:12px;">Alto</span>
+            </div>`;
+          mInstr.style.display = 'block';
+          // Change buttons: left becomes Continuar, right Regresar
+          mClose.textContent = 'Continuar';
+          mPlay.textContent = 'Regresar';
+          mClose.onclick = ()=>{
+            const s = document.getElementById('mathLevelSlider');
+            const v = s ? Number(s.value||1) : 1;
+            const lvl = v===0? 'low' : (v===2? 'high' : 'mid');
+            const base = (link||'Juego_matematico.html').split('?')[0];
+            const target = `${base}?lvl=${lvl}&start=1`;
+            window.location.href = target;
+          };
+          mPlay.onclick = ()=>{ closeModal(); };
+        };
+      } else {
+        mClose.onclick = ()=>{ window.location.href = link; };
+        mPlay.onclick = ()=>{ closeModal(); };
+      }
+      mHero.style.backgroundImage = img ? `url(${img})` : '';
+      mTopLabel.textContent = label || title || '';
+      // No modal override for Habilidades Sociales; handled by click redirect
+      modal.classList.add('show');
+      modalBackdrop.classList.add('show');
+      modal.setAttribute('aria-hidden','false');
+    }
+    function closeModal(){
+      modal.classList.remove('show');
+      modalBackdrop.classList.remove('show');
+      modal.setAttribute('aria-hidden','true');
+      // reset special content
+      mLevels.style.display='none';
+      document.querySelector('.dialog .actions').style.display = 'grid';
+      mHero.style.display = '';
+      mInstr.style.display = 'none';
+    }
+    // Handlers are assigned per-open to reflect swapped actions
+    modalBackdrop.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+
+    gameTiles.forEach(tile=>{
+      tile.addEventListener('click', ()=>{
+        const title = (tile.dataset.title||'').toLowerCase();
+        openModal(tile.dataset.title, tile.dataset.desc, tile.dataset.link, tile.dataset.img, tile.dataset.label);
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

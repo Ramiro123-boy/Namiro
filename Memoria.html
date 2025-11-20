@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Memoria de Secuencia — Juegos</title>
+  <style>
+    :root { --primary: #5a189a; --primary-600: #6d28d9; --primary-700: #5b21b6; --primary-800: #3b0a77; --bg: #faf9ff; --surface: #ffffff; --muted: #ede6ff; --text: #140e26; --text-soft: #2a1b4a; --text-inverse: #ffffff; --border: rgba(17, 12, 34, 0.12); --radius: 12px; --shadow: 0 6px 16px rgba(17, 12, 34, 0.12); --font-size-base: 16px; }
+    html, body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; }
+    html { font-size: var(--font-size-base); }
+    a { color: var(--primary-700); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: var(--text-inverse); }
+    nav { background: var(--primary-700); box-shadow: var(--shadow); }
+    nav a { color: var(--text-inverse) !important; border-radius: 8px; font-weight: 600; }
+    nav a:hover { background: var(--primary-600) !important; }
+    section, .container, .contact-card, .descarga-opciones, .contact-form, .contact-box { background: var(--surface) !important; border-radius: var(--radius) !important; box-shadow: var(--shadow) !important; border: 1px solid var(--border) !important; }
+    h1, h2, h3 { color: var(--primary-700); }
+    header, .site-header, nav, footer { color: var(--text-inverse) !important; }
+    header h1, header h2, header p, .site-header h1, .site-header h2, .site-header p, nav a, footer p { color: var(--text-inverse) !important; }
+    li strong, .contact-card p, .btn-playstore, .btn-appstore { color: var(--primary-700); }
+    button, .btn, input[type="submit"], .social-button { background: var(--primary-600) !important; color: var(--text-inverse) !important; border: none !important; border-radius: 10px !important; padding: 10px 16px !important; cursor: pointer !important; transition: filter .2s ease, transform .12s ease, box-shadow .2s ease; }
+    button:hover, .btn:hover, input[type="submit"]:hover, .social-button:hover, .btn-playstore:hover, .btn-appstore:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 8px 18px rgba(17, 12, 34, 0.18); }
+    input, textarea, select, .resp, .controls { border: 1.5px solid var(--primary-600) !important; border-radius: 10px !important; background: var(--surface) !important; color: var(--text) !important; }
+    footer { background: var(--primary-700) !important; color: var(--text-inverse) !important; }
+    .boton, .boton-abajo { background: var(--primary-600) !important; }
+    .message { background: var(--muted) !important; color: var(--text-soft) !important; border-radius: var(--radius) !important; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 16px; }
+    .grid { display: grid; gap: 16px; }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .progress { width: 100%; height: 10px; background: #eee; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+    .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--primary-600), var(--primary)); width: 0%; transition: width .6s ease; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeInUp .4s ease both; }
+    /* Hero header like Social */
+    :root { --hero-h: 220px; }
+    header.hero { position:relative; height: var(--hero-h); background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color:#fff; display:flex; align-items:center; overflow:hidden; }
+    header.hero .wrap { width:100%; max-width: 980px; margin: 0 auto; padding: 16px; }
+    header.hero h1 { margin:0 0 6px 0; }
+    header.hero p { margin:0; opacity:1; color:#fff; }
+    header.hero .top-bar { position:absolute; top:0; left:0; right:0; background:#ffffff; color: var(--primary-700); font-weight:900; padding:10px 14px; }
+    .container { max-width: 980px; margin: 16px auto 32px; padding: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+    .home-btn { position: fixed; top: 16px; right: 16px; width: 42px; height: 42px; border-radius: 10px; display:flex; align-items:center; justify-content:center; background: var(--surface); color: var(--primary-700); border: 1px solid var(--border); box-shadow: var(--shadow); text-decoration:none; z-index: 2002; }
+    .home-btn:hover { filter: brightness(1.03); transform: translateY(-1px); }
+    .fab { position: fixed !important; right: 16px !important; top: 16px !important; bottom: auto !important; left: auto !important; z-index: 1000 !important; width: 56px; height: 56px; border-radius: 50%; background: var(--primary-600); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(17,12,34,.18); border: none; }
+    .fab:hover { filter: brightness(1.06); transform: translateY(-1px); }
+    .drawer-backdrop { position: fixed; inset: 0; background: rgba(10, 6, 20, .36); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+    .drawer { position: fixed; top: 0; right: -360px; width: 360px; max-width: 90%; height: 100vh; background: var(--surface); box-shadow: -4px 0 20px rgba(0,0,0,.12); border-left: 1px solid var(--border); transition: right .28s ease; display: flex; flex-direction: column; }
+    .drawer.open { right: 0; }
+    .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+    .drawer header { padding: 16px; background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: #fff; }
+    .drawer header h3 { color: #fffbeb !important; }
+    .drawer .content { padding: 16px; overflow: auto; flex: 1; }
+    .toast { position: fixed; right: 20px; bottom: 20px; transform: translateY(12px); background: var(--primary-700); color: #fff; padding: 8px 12px; border-radius: 8px; opacity: 0; transition: .22s ease; box-shadow: 0 10px 24px rgba(0,0,0,.18); font-size: 13px; max-width: 80vw; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .ripple { position: relative; overflow: hidden; }
+    .ripple::after { content: ""; position: absolute; border-radius: 50%; transform: scale(0); background: rgba(255,255,255,.35); opacity: 0; pointer-events: none; }
+    .no-anim *, .no-anim *::before, .no-anim *::after { transition: none !important; animation: none !important; }
+    [data-theme="dark"] { --bg: #0f0a1a; --surface: #171022; --muted: #1f1530; --text: #ece8f5; --text-soft: #cfc4e8; --text-inverse: #ffffff; --border: rgba(236, 232, 245, 0.12); --shadow: 0 8px 20px rgba(0,0,0,.35); --primary: #7c3aed; --primary-600: #7c3aed; --primary-700: #6d28d9; --primary-800: #4c1d95; }
+    [data-theme="dark"] header { background: linear-gradient(90deg, #2b0f58, var(--primary-600)); }
+    [data-theme="dark"] nav { background: #2b0f58; }
+    [data-theme="dark"] footer { background: #2b0f58 !important; }
+    .switch { position: relative; width: 44px; height: 24px; background: #e5e7eb; border-radius: 999px; cursor: pointer; transition: background .2s ease; border: 1px solid var(--border); }
+    .switch .thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,.2); transition: left .2s ease, background .2s ease; }
+    .switch.on { background: var(--primary-600); }
+    .switch.on .thumb { left: 22px; background: #111827; }
+    .switch.on .thumb .icon-moon { color: #f5f5f5 !important; }
+    .segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
+    .segmented button { border: none; background: transparent; padding: 8px 12px; cursor: pointer; color: var(--text); transition: background .18s ease, color .18s ease; font-weight: 600; }
+    .segmented button + button { border-left: 1px solid var(--border); }
+    .segmented button:hover { background: var(--muted); }
+    .segmented button:active { transform: none; }
+    .segmented button.active { background: color-mix(in srgb, var(--primary-600) 14%, transparent); color: var(--primary-700); }
+    [data-theme="dark"] .switch { background: #1f2937; border-color: var(--border); }
+    [data-theme="dark"] .segmented { background: var(--surface); }
+    .tabs { display: flex; gap: 8px; padding: 8px 16px; border-bottom: 1px solid var(--border); }
+    .tabs .tab-btn { border: none; background: transparent; color: var(--text); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+    .tabs .tab-btn.active { background: var(--muted); }
+    @keyframes slideInX { from { opacity:.0; transform: translateX(6px);} to{ opacity:1; transform:none;} }
+    .slide-in { animation: slideInX .25s ease both; }
+  </style>
+  <script>
+    (function(){
+      try {
+        const s = JSON.parse(localStorage.getItem('app_settings')||'{}');
+        const root = document.documentElement;
+        if(s.theme==='dark') root.setAttribute('data-theme','dark'); else root.removeAttribute('data-theme');
+        if(s.fontSize){ root.style.setProperty('--font-size-base', (Number(s.fontSize)||16)+'px'); }
+        if(s.reduceMotion){ document.addEventListener('DOMContentLoaded', ()=> document.body.classList.add('no-anim')); }
+      } catch(e){}
+    })();
+  </script>
+
+  <style>
+    :root{
+      --c1: #6b21a8;
+      --c2: #7c3aed;
+      --c3: #c4b5fd;
+      --c4: var(--bg);
+      --c5: #efe7ff;
+      --radius: 16px;
+      --gap: 12px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+    }
+
+    /* Reinforce hero visibility */
+    body > header.hero{ display:flex !important; min-height: var(--hero-h) !important; }
+
+    #app{
+      padding:14px;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:var(--gap);
+      max-width:720px;
+      margin:0 auto;
+      width:100%;
+    }
+
+    .level-card{
+      background:linear-gradient(90deg,var(--c2),var(--c3));
+      padding:14px;
+      border-radius: var(--radius);
+      color:#032;
+      box-shadow: 0 8px 24px rgba(8,18,30,.08);
+    }
+    .level-card h2{margin:0;font-size:1.1rem}
+    .level-card p{margin:.5rem 0 0;font-size:.95rem}
+
+    .play-area{
+      background: var(--surface);
+      border-radius: 18px;
+      padding:18px;
+      min-height: 360px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      box-shadow: 0 10px 30px rgba(16,42,67,.06);
+    }
+
+    .sequence-display{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .seq-item{
+      min-width:54px;
+      min-height:54px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:1.2rem;
+      background:var(--c4);
+      color:#042;
+      box-shadow: 0 6px 18px rgba(8,18,30,.05);
+      transition: transform .14s ease, opacity .14s ease;
+    }
+    .seq-item.dim{ opacity:.14; transform: scale(.98); }
+
+    .tile{
+      width:64px;
+      height:64px;
+      border-radius:12px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition: transform .12s ease, opacity .12s;
+      box-shadow: 0 6px 14px rgba(8,18,30,.06);
+      opacity:0.92;
+    }
+    .tile:active{ transform: scale(.96); }
+    .tile.active{
+      transform: scale(1.12);
+      box-shadow: 0 10px 28px rgba(8,18,30,.12);
+      opacity:1;
+    }
+
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      padding:12px 14px;
+      border-radius: 12px;
+      border:0;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .btn.primary{ background:var(--c1); color:#fff; }
+    .btn.ghost{ background:#fff; color:#0b3740; border:2px solid var(--c2); }
+
+    .status{ font-size:.95rem; color:#184 }
+
+    .motiv{
+      background:linear-gradient(90deg,var(--c5),var(--c3));
+      padding:14px;
+      border-radius:12px;
+      text-align:center;
+      font-weight:700;
+      box-shadow: 0 8px 20px rgba(16,42,67,.06);
+    }
+
+    .input-inline{ width:100%; padding:10px; font-size:1rem; border-radius:10px; border:2px solid var(--c2) }
+
+    .pal-1{ background: var(--c1) }
+    .pal-2{ background: var(--c2) }
+    .pal-3{ background: var(--c3) }
+    .pal-4{ background: var(--c4) }
+    .pal-5{ background: var(--c5) }
+
+    /* Dark mode overrides for this page's custom palette and components */
+    [data-theme="dark"]{
+      --c4: #0f0a1a; /* base dark background */
+      --c5: #1f1530; /* muted dark */
+      --bg: linear-gradient(180deg, #0f0a1a, #0f0a1a);
+    }
+    [data-theme="dark"] .level-card{ color: var(--text); }
+    [data-theme="dark"] .play-area{ background: var(--surface); }
+    [data-theme="dark"] .seq-item{ background: #1f1530; color: var(--text); }
+    [data-theme="dark"] .btn.ghost{ background: transparent; color: var(--text); border: 2px solid var(--c2); }
+    [data-theme="dark"] .status{ color: #a7f3d0; }
+
+    @media(min-width:720px){
+      .play-area{ min-height:420px }
+      .seq-item{ min-width:68px; min-height:68px; font-size:1.4rem }
+      .tile{ width:80px;height:80px }
+    }
+  </style>
+</head>
+<body>
+  <a href="Inicio.html" class="home-btn" aria-label="Volver a selección de juegos" title="Inicio">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7"/><path d="M9 22V12h6v10"/></svg>
+  </a>
+  <header class="hero">
+    <div class="top-bar">Memoria de Secuencia</div>
+    <div class="wrap">
+      <h1>Memoria de Secuencia</h1>
+      <p>Entrena tu memoria con secuencias — avanza nivel a nivel</p>
+    </div>
+  </header>
+
+  <main class="container"><div id="app">
+    <section id="levelCard" class="level-card" aria-live="polite"></section>
+
+    <section id="playArea" class="play-area" role="region" aria-label="Área de juego">
+    </section>
+
+    <div class="controls">
+      <button id="startBtn" class="btn primary">Iniciar / Continuar</button>
+      <button id="skipBtn" class="btn ghost">Saltar ejercicio</button>
+      <div id="status" class="status" aria-live="polite"></div>
+    </div>
+  </div></main>
+
+  <footer class="site-footer">
+    <small>© 2025 — Juegos educativos — Namiro</small>
+  </footer>
+
+  <script>
+  (function(){
+    'use strict';
+
+    const app = {
+      config: {
+        levels: [
+          { name:"Exploradores de Secuencias 🟢", objective:"Recordar secuencias cortas y sencillas.", length:3, visualOptions:3, toneSpeed:420 },
+          { name:"Misión Espacial 🚀", objective:"Secuencias más largas y combinadas.", length:4, visualOptions:4, toneSpeed:360 },
+          { name:"Gran Misterio 🔐", objective:"Secuencias lógicas y condicionales.", length:5, visualOptions:5, toneSpeed:340 },
+          { name:"Estrategas del Reino 🏰", objective:"Secuencias complejas y multitarea.", length:6, visualOptions:5, toneSpeed:300 },
+          { name:"Guardianes del Tiempo ⏳", objective:"Secuencias avanzadas y desafiantes.", length:8, visualOptions:6, toneSpeed:260 }
+        ],
+        gameTypes: ["numeric","visual","audio"]
+      },
+      state: { levelIndex: 0, gameIndex: 0, sequence: [] },
+      storageKey: "memseq_progress_v2"
+    };
+
+    const $ = id => document.getElementById(id);
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const randInt = (min,max) => Math.floor(Math.random()*(max-min+1)) + min;
+
+    let levelCard, playArea, startBtn, skipBtn, status;
+
+    let audioCtx = null;
+    function ensureAudioContext(){
+      try {
+        if(!audioCtx){
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
+      } catch(e) {
+        audioCtx = null;
+      }
+      return audioCtx;
+    }
+    function playTone(freq, duration=260){
+      const ctx = ensureAudioContext();
+      if(!ctx) return Promise.resolve();
+      return new Promise(res=>{
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.value = freq;
+        o.connect(g);
+        g.connect(ctx.destination);
+        g.gain.setValueAtTime(0.001, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.4, ctx.currentTime + 0.01);
+        o.start();
+        setTimeout(()=>{
+          g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.02);
+          setTimeout(()=>{ try{o.stop();}catch(e){}; res(); }, 40);
+        }, duration);
+      });
+    }
+
+    function saveProgress(){
+      try{
+        // Fallback legacy key
+        localStorage.setItem(app.storageKey, JSON.stringify({
+          levelIndex: app.state.levelIndex,
+          gameIndex: app.state.gameIndex
+        }));
+      }catch(e){}
+      // Persistir por cuenta
+      try{
+        const session = localStorage.getItem('session');
+        if(!session) return;
+        let users = {};
+        try { users = JSON.parse(localStorage.getItem('users_db')||'{}'); } catch(e) { users = {}; }
+        users[session] = users[session] || {};
+        users[session].progress = users[session].progress || {};
+        users[session].progress.memory = {
+          level: app.state.levelIndex,
+          levelIndex: app.state.levelIndex,
+          gameIndex: app.state.gameIndex
+        };
+        localStorage.setItem('users_db', JSON.stringify(users));
+      }catch(e){}
+    }
+    function loadProgress(){
+      // Primero intenta per-cuenta en users_db
+      try{
+        const session = localStorage.getItem('session');
+        if(session){
+          let users = {};
+          try { users = JSON.parse(localStorage.getItem('users_db')||'{}'); } catch(e){ users = {}; }
+          const prog = users[session] && users[session].progress && users[session].progress.memory;
+          if(prog){
+            if(typeof prog.levelIndex === 'number') app.state.levelIndex = prog.levelIndex;
+            if(typeof prog.gameIndex === 'number') app.state.gameIndex = prog.gameIndex;
+            return true;
+          }
+        }
+      }catch(e){}
+      // Fallback al almacenamiento legacy
+      try{
+        const raw = localStorage.getItem(app.storageKey);
+        if(!raw) return false;
+        const p = JSON.parse(raw);
+        if(typeof p.levelIndex === 'number' && typeof p.gameIndex === 'number'){
+          app.state.levelIndex = p.levelIndex;
+          app.state.gameIndex = p.gameIndex;
+          return true;
+        }
+      }catch(e){}
+      return false;
+    }
+
+    function genNumericSequence(len){
+      return Array.from({length: len}, ()=> randInt(0,9));
+    }
+    function genVisualSequence(len, options){
+      return Array.from({length: len}, ()=> randInt(0, options-1));
+    }
+    function genAudioSequence(len){
+      const freqs = [330, 440, 554, 660, 880, 988];
+      return Array.from({length: len}, ()=> freqs[randInt(0, freqs.length-1)]);
+    }
+
+    function setStatus(text){
+      if(status) status.textContent = text || '';
+    }
+    function renderLevelInfo(){
+      const cfg = app.config.levels[app.state.levelIndex] || {};
+      levelCard.innerHTML = `<h2>${cfg.name || '—'}</h2><p>${cfg.objective || ''}</p>
+        <p style="margin-top:8px;font-weight:700">Ejercicio: ${app.config.gameTypes[app.state.gameIndex % app.config.gameTypes.length]}</p>`;
+    }
+
+    // --- numeric
+    async function showNumeric(seq){
+      playArea.innerHTML = '';
+      const disp = document.createElement('div'); disp.className = 'sequence-display';
+      playArea.appendChild(disp);
+
+      for(let i=0;i<seq.length;i++){
+        const d = document.createElement('div');
+        d.className = 'seq-item';
+        d.textContent = seq[i];
+        disp.appendChild(d);
+        await sleep(700);
+        d.classList.add('dim');
+        await sleep(120);
+      }
+
+      const input = document.createElement('input');
+      input.className = 'input-inline';
+      input.placeholder = 'Escribe la secuencia (ej: 3 1 4 o 314)';
+      playArea.appendChild(input);
+
+      const submit = document.createElement('button');
+      submit.className = 'btn primary';
+      submit.textContent = 'Enviar';
+      playArea.appendChild(submit);
+
+      return new Promise(resolve => {
+        submit.onclick = () => {
+          const raw = (input.value || '').toString().trim();
+          const normalized = raw.replace(/[\s,]+/g, '');
+          const expected = seq.join('');
+          const ok = normalized === expected;
+          resolve(ok);
+        };
+      });
+    }
+
+    // --- visual
+    async function showVisual(seq, options){
+      playArea.innerHTML = '';
+      const palette = document.createElement('div'); palette.className = 'sequence-display';
+      playArea.appendChild(palette);
+      const colorClasses = ['pal-1','pal-2','pal-3','pal-4','pal-5'];
+
+      for(let i=0;i<options;i++){
+        const t = document.createElement('div');
+        t.className = `tile ${colorClasses[i % colorClasses.length]}`;
+        t.dataset.index = i;
+        palette.appendChild(t);
+        t.style.opacity = '0.9';
+      }
+
+      for(let s of seq){
+        const tile = palette.querySelector(`.tile[data-index="${s}"]`);
+        if(!tile) continue;
+        tile.classList.add('active');
+        await sleep(520);
+        tile.classList.remove('active');
+        await sleep(140);
+      }
+
+      const user = [];
+      const info = document.createElement('div');
+      info.style.marginTop = '8px';
+      info.textContent = `Repite la secuencia tocando ${seq.length} cuadro(s).`;
+      playArea.appendChild(info);
+
+      return new Promise(resolve => {
+        const tiles = palette.querySelectorAll('.tile');
+        function clickHandler(e){
+          const idx = Number(e.currentTarget.dataset.index);
+          user.push(idx);
+          e.currentTarget.classList.add('active');
+          setTimeout(()=> e.currentTarget.classList.remove('active'), 140);
+          if(user.length === seq.length){
+            tiles.forEach(tt => tt.removeEventListener('click', clickHandler));
+            const ok = user.every((v,i) => v === seq[i]);
+            resolve(ok);
+          }
+        }
+        tiles.forEach(t => t.addEventListener('click', clickHandler));
+      });
+    }
+
+    // --- audio
+    async function showAudio(seq){
+      playArea.innerHTML = '';
+      const info = document.createElement('p');
+      info.textContent = 'Escucha la secuencia de tonos (se reproducirá ahora).';
+      playArea.appendChild(info);
+
+      for(let f of seq){
+        await playTone(f, 300);
+        await sleep(140);
+      }
+
+      const freqs = Array.from(new Set(seq.concat([330,440,554,660,880,988]))).slice(0,6);
+      const palette = document.createElement('div'); palette.className = 'sequence-display';
+      for(let f of freqs){
+        const b = document.createElement('div');
+        b.className = 'tile pal-2';
+        b.textContent = '♪';
+        b.dataset.freq = f;
+        palette.appendChild(b);
+        b.addEventListener('click', ()=> { playTone(Number(f), 180); });
+      }
+      playArea.appendChild(palette);
+
+      const prompt = document.createElement('div');
+      prompt.style.marginTop = '8px';
+      prompt.textContent = `Reproduce la secuencia tocando ${seq.length} botones en orden.`;
+      playArea.appendChild(prompt);
+
+      return new Promise(resolve => {
+        const user = [];
+        const tiles = palette.querySelectorAll('.tile');
+        function handler(e){
+          const f = Number(e.currentTarget.dataset.freq);
+          user.push(f);
+          e.currentTarget.classList.add('active');
+          setTimeout(()=> e.currentTarget.classList.remove('active'), 140);
+          if(user.length === seq.length){
+            tiles.forEach(t => t.removeEventListener('click', handler));
+            const ok = user.every((v,i) => Math.abs(v - seq[i]) < 90);
+            resolve(ok);
+          }
+        }
+        tiles.forEach(t => t.addEventListener('click', handler));
+      });
+    }
+
+    // --- main
+    async function runGame(){
+      try{
+        renderLevelInfo();
+        const cfg = app.config.levels[app.state.levelIndex];
+        const type = app.config.gameTypes[ app.state.gameIndex % app.config.gameTypes.length ];
+        setStatus(`Nivel ${app.state.levelIndex + 1} — ${type}`);
+
+        const len = Math.max(3, cfg.length);
+        let seq = [];
+        if(type === 'numeric') seq = genNumericSequence(len);
+        if(type === 'visual') seq = genVisualSequence(len, Math.max(3, cfg.visualOptions));
+        if(type === 'audio') seq = genAudioSequence(len);
+
+        app.state.sequence = seq.slice();
+
+        let ok = false;
+        if(type === 'numeric') ok = await showNumeric(seq);
+        else if(type === 'visual') ok = await showVisual(seq, Math.max(3,cfg.visualOptions));
+        else if(type === 'audio') ok = await showAudio(seq);
+
+        if(ok){
+          setStatus('✅ ¡Correcto! Preparando siguiente ejercicio...');
+          app.state.gameIndex++;
+          saveProgress();
+          if(app.state.gameIndex % app.config.gameTypes.length === 0){
+            await showMotivationAndAdvance();
+          } else {
+            await sleep(700);
+            runGame();
+          }
+        } else {
+          setStatus('❌ No fue correcto. Puedes intentar de nuevo o saltar.');
+          const retry = document.createElement('button');
+          retry.className = 'btn primary';
+          retry.textContent = 'Repetir ejercicio';
+          retry.onclick = () => { retry.remove(); runGame(); };
+          playArea.appendChild(retry);
+        }
+      }catch(err){
+        console.error(err);
+        setStatus('Error: ' + (err && err.message ? err.message : 'ocurrió un problema'));
+        playArea.innerHTML = `<div style="color:#900">Ha ocurrido un error. Revisa la consola (F12) o recarga la página.</div>`;
+      }
+    }
+
+    async function showMotivationAndAdvance(){
+      playArea.innerHTML = `<div class="motiv">🌟 ¡Nivel ${app.state.levelIndex + 1} superado! Excelente trabajo. Avanzando al siguiente nivel...</div>`;
+      app.state.levelIndex++;
+      app.state.gameIndex = 0;
+      saveProgress();
+      await sleep(1800);
+      if(app.state.levelIndex >= app.config.levels.length){
+        playArea.innerHTML = `<div class="motiv">🏆 ¡Felicidades! Completaste todos los niveles. Puedes reiniciar para entrenar otra vez.</div>`;
+        setStatus('Juego completado');
+        try{ localStorage.removeItem(app.storageKey); }catch(e){}
+        startBtn.textContent = 'Reiniciar';
+        startBtn.disabled = false;
+       
+        return;
+      }
+      runGame();
+    }
+
+    // --- eventos
+    document.addEventListener('DOMContentLoaded', ()=>{
+      levelCard = $('levelCard');
+      playArea = $('playArea');
+      startBtn = $('startBtn');
+      skipBtn = $('skipBtn');
+      status = $('status');
+
+      // Cargar progreso si existe
+      loadProgress();
+      renderLevelInfo();
+      setStatus('Listo para comenzar');
+
+      startBtn.addEventListener('click', ()=>{
+        startBtn.disabled = true;
+        runGame().finally(()=> startBtn.disabled = false);
+      });
+
+      skipBtn.addEventListener('click', ()=>{
+        // saltar ejercicio actual y pasar al siguiente
+        app.state.gameIndex++;
+        saveProgress();
+        runGame();
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

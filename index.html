@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillRise</title>
+    <style>
+      :root { --primary: #5a189a; --primary-600: #6d28d9; --primary-700: #5b21b6; --primary-800: #3b0a77; --bg: #faf9ff; --surface: #ffffff; --muted: #ede6ff; --text: #140e26; --text-soft: #2a1b4a; --text-inverse: #ffffff; --border: rgba(17, 12, 34, 0.12); --radius: 12px; --shadow: 0 6px 16px rgba(17, 12, 34, 0.12); --font-size-base: 16px; }
+      html, body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; }
+      html { font-size: var(--font-size-base); }
+      a { color: var(--primary-700); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: var(--text-inverse); }
+      nav { background: var(--primary-700); box-shadow: var(--shadow); }
+      nav a { color: var(--text-inverse) !important; border-radius: 8px; font-weight: 600; }
+      nav a:hover { background: var(--primary-600) !important; }
+      section, .container, .contact-card, .descarga-opciones, .contact-form, .contact-box { background: var(--surface) !important; border-radius: var(--radius) !important; box-shadow: var(--shadow) !important; border: 1px solid var(--border) !important; }
+      h1, h2, h3 { color: var(--primary-700); }
+      header, .site-header, nav, footer { color: var(--text-inverse) !important; }
+      header h1, header h2, header p, .site-header h1, .site-header h2, .site-header p, nav a, footer p { color: var(--text-inverse) !important; }
+      li strong, .contact-card p, .btn-playstore, .btn-appstore { color: var(--primary-700); }
+      button, .btn, input[type="submit"], .social-button { background: var(--primary-600) !important; color: var(--text-inverse) !important; border: none !important; border-radius: 10px !important; padding: 10px 16px !important; cursor: pointer !important; transition: filter .2s ease, transform .12s ease, box-shadow .2s ease; }
+      button:hover, .btn:hover, input[type="submit"]:hover, .social-button:hover, .btn-playstore:hover, .btn-appstore:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 8px 18px rgba(17, 12, 34, 0.18); }
+      input, textarea, select, .resp, .controls { border: 1.5px solid var(--primary-600) !important; border-radius: 10px !important; background: var(--surface) !important; color: var(--text) !important; }
+      footer { background: var(--primary-700) !important; color: var(--text-inverse) !important; }
+      .boton, .boton-abajo { background: var(--primary-600) !important; }
+      .message { background: var(--muted) !important; color: var(--text-soft) !important; border-radius: var(--radius) !important; }
+      .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 16px; }
+      .grid { display: grid; gap: 16px; }
+      .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+      .progress { width: 100%; height: 10px; background: #eee; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+      .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--primary-600), var(--primary)); width: 0%; transition: width .6s ease; }
+      @keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+      .fade-in { animation: fadeInUp .4s ease both; }
+      .fab { position: fixed !important; right: 16px !important; top: 16px !important; bottom: auto !important; left: auto !important; z-index: 1000 !important; width: 56px; height: 56px; border-radius: 50%; background: var(--primary-600); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(17,12,34,.18); border: none; }
+      .fab:hover { filter: brightness(1.06); transform: translateY(-1px); }
+      .drawer-backdrop { position: fixed; inset: 0; background: rgba(10, 6, 20, .36); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+      .drawer { position: fixed; top: 0; right: -360px; width: 360px; max-width: 90%; height: 100vh; background: var(--surface); box-shadow: -4px 0 20px rgba(0,0,0,.12); border-left: 1px solid var(--border); transition: right .28s ease; display: flex; flex-direction: column; }
+      .drawer.open { right: 0; }
+      .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+      .drawer header { padding: 16px; background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: #fff; }
+      .drawer header h3 { color: #fffbeb !important; }
+      .drawer .content { padding: 16px; overflow: auto; flex: 1; }
+      .toast { position: fixed; right: 20px; bottom: 20px; transform: translateY(12px); background: var(--primary-700); color: #fff; padding: 8px 12px; border-radius: 8px; opacity: 0; transition: .22s ease; box-shadow: 0 10px 24px rgba(0,0,0,.18); font-size: 13px; max-width: 80vw; }
+      .toast.show { opacity: 1; transform: translateY(0); }
+      .ripple { position: relative; overflow: hidden; }
+      .ripple::after { content: ""; position: absolute; border-radius: 50%; transform: scale(0); background: rgba(255,255,255,.35); opacity: 0; pointer-events: none; }
+      .no-anim *, .no-anim *::before, .no-anim *::after { transition: none !important; animation: none !important; }
+      [data-theme="dark"] { --bg: #0f0a1a; --surface: #171022; --muted: #1f1530; --text: #ece8f5; --text-soft: #cfc4e8; --text-inverse: #ffffff; --border: rgba(236, 232, 245, 0.12); --shadow: 0 8px 20px rgba(0,0,0,.35); --primary: #7c3aed; --primary-600: #7c3aed; --primary-700: #6d28d9; --primary-800: #4c1d95; }
+      [data-theme="dark"] header { background: linear-gradient(90deg, #2b0f58, var(--primary-600)); }
+      [data-theme="dark"] nav { background: #2b0f58; }
+      [data-theme="dark"] footer { background: #2b0f58 !important; }
+      .switch { position: relative; width: 44px; height: 24px; background: #e5e7eb; border-radius: 999px; cursor: pointer; transition: background .2s ease; border: 1px solid var(--border); }
+      .switch .thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,.2); transition: left .2s ease, background .2s ease; }
+      .switch.on { background: var(--primary-600); }
+      .switch.on .thumb { left: 22px; background: #111827; }
+      .switch.on .thumb .icon-moon { color: #f5f5f5 !important; }
+      .segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
+      .segmented button { border: none; background: transparent; padding: 8px 12px; cursor: pointer; color: var(--text); transition: background .18s ease, color .18s ease; font-weight: 600; }
+      .segmented button + button { border-left: 1px solid var(--border); }
+      .segmented button:hover { background: var(--muted); }
+      .segmented button:active { transform: none; }
+      .segmented button.active { background: color-mix(in srgb, var(--primary-600) 14%, transparent); color: var(--primary-700); }
+      [data-theme="dark"] .switch { background: #1f2937; border-color: var(--border); }
+      [data-theme="dark"] .segmented { background: var(--surface); }
+      .tabs { display: flex; gap: 8px; padding: 8px 16px; border-bottom: 1px solid var(--border); }
+      .tabs .tab-btn { border: none; background: transparent; color: var(--text); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+      .tabs .tab-btn.active { background: var(--muted); }
+      @keyframes slideInX { from { opacity:.0; transform: translateX(6px);} to{ opacity:1; transform:none;} }
+      .slide-in { animation: slideInX .25s ease both; }
+    </style>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #CAD2C5; color: #354F52; line-height: 1.6; }
+      header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: white; padding: 30px; text-align: center; }
+      header h1 { font-size: 2.5em; margin: 0; }
+      header h2 { font-size: 1.5em; font-weight: 300; margin-top: 10px; }
+      nav { display: flex; justify-content: center; background-color: #6D28D9; padding: 10px 0; }
+      nav a { color: white; text-decoration: none; padding: 12px 20px; margin: 0 15px; font-size: 1.1em; font-weight: bold; transition: background-color 0.3s ease, border-radius 0.3s ease; }
+      nav a:hover { background-color: #5B21B6; border-radius: 20px; }
+      nav a:active { background-color: #4C1D95; }
+      .container { width: 90%; max-width: 1200px; margin: 30px auto; padding: 20px; }
+      section { margin-bottom: 40px; padding: 20px; background-color: #FFFFFF; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+      section h2 { font-size: 1.8em; margin-bottom: 15px; color: #52796F; }
+      section p { font-size: 1.1em; text-align: justify; margin-bottom: 20px; }
+      footer { text-align: center; padding: 20px; background-color: #52796F; color: white; font-size: 1.2em; position: relative; width: 100%; bottom: 0; }
+      li strong { font-weight: bold; color: #52796F; font-size: 1.1em; }
+      .info-container { display: flex; align-items: center; gap: 20px; }
+      .info-text { width: 60%; }
+      .info-image img { width: 300px; max-width: 100%; }
+      .titulo-centrado { text-align: center; }
+      iframe { display: block; margin: auto; }
+      footer p { margin: 0; }
+      @media (max-width: 768px) {
+        header h1 { font-size: 2em; }
+        header h2 { font-size: 1.2em; }
+        nav { flex-direction: column; }
+        nav a { padding: 12px 15px; margin: 5px 0; }
+        section { padding: 15px; }
+      }
+      .boton { position: fixed; bottom: 20px; right: 20px; background-color: #84A98C; color: white; border: none; padding: 20px 25px; cursor: pointer; border-radius: 10px; display: none; font-size: 20px; transition: all 0.3s ease; }
+      .boton-abajo { right: 80px; background-color: #84A98C; }
+      .boton:hover { opacity: 0.8; }
+    </style>
+    <link rel="icon" href="../Imagenes/logo (1).ico">
+    <script>
+      (function(){
+        try {
+          const s = JSON.parse(localStorage.getItem('app_settings')||'{}');
+          const root = document.documentElement;
+          root.removeAttribute('data-theme');
+          if(s.fontSize){ root.style.setProperty('--font-size-base', (Number(s.fontSize)||16)+'px'); }
+          if(s.reduceMotion){ document.addEventListener('DOMContentLoaded', ()=> document.body.classList.add('no-anim')); }
+        } catch(e){}
+      })();
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Bienvenidos a Namiro</h1>
+        <h2>Tu camino hacia el desarrollo de habilidades blandas</h2>
+    </header>
+    
+    <nav>
+        <a class="ripple" href="index.html">Inicio</a>
+        <a class="ripple" href="About.html">Sobre Nosotros</a>
+        <a class="ripple" href="Download.html">Descargar</a>
+        <a class="ripple" href="Contacto.html">Contacto</a>
+    </nav>
+    
+    <section class="fade-in">
+        <h2>Misión</h2>
+        <p>Nuestra misión es crear una experiencia inmersiva y educativa que permita a los jugadores mejorar sus habilidades blandas, como la comunicación, el liderazgo y el trabajo en equipo, a través de dinámicas de juego interactivas y desafiantes. El objetivo es proporcionar a los usuarios las herramientas necesarias para enfrentarse a situaciones reales, potenciando su desarrollo personal y profesional mientras se divierten en un entorno seguro y estimulante.</p>
+    </section>
+    
+    <section class="fade-in">
+        <h2>Visión</h2>
+        <p>Queremos ser la plataforma de referencia para el desarrollo de habilidades blandas mediante la gamificación, ayudando a millones de jugadores a alcanzar su máximo potencial. A través de un juego accesible, dinámico y desafiante, buscamos transformar la forma en que las personas aprenden y aplican habilidades clave para su crecimiento, convirtiendo el proceso de aprendizaje en una aventura divertida, memorable y efectiva.</p>
+    </section>
+    
+    <section class="fade-in">
+        <h2>¿Qué hacemos?</h2>
+        <p>Desarrollamos una aplicación interactiva diseñada para ayudarte a descubrir y fortalecer tus habilidades blandas de una manera divertida y efectiva.</p>
+        <p>Nuestra aplicación se presenta como un juego dinámico, donde a través de pequeñas actividades y desafíos, podrás desarrollar habilidades clave como la comunicación, el trabajo en equipo, la resolución de problemas y muchas más.</p>
+        <p>Creemos que las habilidades blandas son esenciales para el éxito en cualquier ámbito de la vida, ya sea en el trabajo, la escuela o en tus relaciones personales. Por eso, hemos creado una herramienta que te permitirá aprender y practicar estas habilidades de una forma entretenida y accesible.</p>
+    </section>    
+    <section class="info-container fade-in">
+        <div class="info-text">
+            <h2>En nuestra pagina web encontrarás:</h2>
+            <ul>
+                <li><strong>Actividades interactivas:</strong> Diseñadas para poner a prueba tus habilidades en diferentes situaciones.</li>
+                <li><strong>Desafíos divertidos:</strong> Que te motivarán a superar tus límites y desarrollar nuevas habilidades.</li>
+                <li><strong>Retroalimentación personalizada:</strong> Para que puedas identificar tus fortalezas y áreas de mejora.</li>
+                <li><strong>Contenido informativo:</strong> Sobre la importancia de las habilidades blandas y cómo aplicarlas en tu vida diaria.</li>
+            </ul>
+        </div>
+        <div class="info-image">
+            <img src="../Imagenes/imagen1.png" alt="Habilidades Blandas" width="150px" height="250px">
+        </div>
+    </section>
+    
+ 
+    <section class="fade-in">
+        <h3>¡Prepárate para embarcarte en una aventura de aprendizaje y descubre el potencial que tienes para desarrollar tus habilidades blandas!</h3>
+    </section>
+    <footer>
+        <p>&copy; 2025 Namiro. Todos los derechos reservados.</p>
+        <!-- Botones -->
+    <button id="irArriba" class="boton ripple" onclick="scrollToTop()">⬆</button>
+    <button id="irAbajo" class="boton boton-abajo ripple" onclick="scrollToBottom()">⬇</button>
+
+    <script>
+        // Función para ir al fondo de la página
+        function scrollToBottom() {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // Función para regresar arriba
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mostrar/ocultar los botones según el scroll
+        window.addEventListener("scroll", function() {
+            let irArriba = document.getElementById("irArriba");
+            let irAbajo = document.getElementById("irAbajo");
+
+            if (window.scrollY > 100) {
+                irArriba.style.display = "block";
+            } else {
+                irArriba.style.display = "none";
+            }
+
+            if (window.innerHeight + window.scrollY < document.body.offsetHeight - 100) {
+                irAbajo.style.display = "block";
+            } else {
+                irAbajo.style.display = "none";
+            }
+        });
+        // Ripple effect
+        document.addEventListener('click', function(e){
+          const t = e.target.closest('.ripple');
+          if(!t) return;
+          const rect = t.getBoundingClientRect();
+          const d = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - d/2;
+          const y = e.clientY - rect.top - d/2;
+          const wave = document.createElement('span');
+          wave.style.position='absolute';wave.style.borderRadius='50%';
+          wave.style.pointerEvents='none';wave.style.width=wave.style.height=d+'px';
+          wave.style.left=x+'px';wave.style.top=y+'px';
+          wave.style.background='rgba(255,255,255,.35)';
+          wave.style.transform='scale(0)';wave.style.opacity='0.9';
+          wave.style.transition='transform .45s ease, opacity .6s ease';
+          t.style.position='relative'; t.appendChild(wave);
+          requestAnimationFrame(()=>{ wave.style.transform='scale(1.8)'; wave.style.opacity='0'; });
+          setTimeout(()=> wave.remove(), 650);
+        });
+    </script>
+    </footer>
+</body>
+</html>

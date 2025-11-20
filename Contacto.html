@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Namiro</title>
+    <style>
+      :root { --primary: #5a189a; --primary-600: #6d28d9; --primary-700: #5b21b6; --primary-800: #3b0a77; --bg: #faf9ff; --surface: #ffffff; --muted: #ede6ff; --text: #140e26; --text-soft: #2a1b4a; --text-inverse: #ffffff; --border: rgba(17, 12, 34, 0.12); --radius: 12px; --shadow: 0 6px 16px rgba(17, 12, 34, 0.12); --font-size-base: 16px; }
+      html, body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; }
+      html { font-size: var(--font-size-base); }
+      a { color: var(--primary-700); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: var(--text-inverse); }
+      nav { background: var(--primary-700); box-shadow: var(--shadow); }
+      nav a { color: var(--text-inverse) !important; border-radius: 8px; font-weight: 600; }
+      nav a:hover { background: var(--primary-600) !important; }
+      section, .container, .contact-card, .descarga-opciones, .contact-form, .contact-box { background: var(--surface) !important; border-radius: var(--radius) !important; box-shadow: var(--shadow) !important; border: 1px solid var(--border) !important; }
+      h1, h2, h3 { color: var(--primary-700); }
+      header, .site-header, nav, footer { color: var(--text-inverse) !important; }
+      header h1, header h2, header p, .site-header h1, .site-header h2, .site-header p, nav a, footer p { color: var(--text-inverse) !important; }
+      li strong, .contact-card p, .btn-playstore, .btn-appstore { color: var(--primary-700); }
+      button, .btn, input[type="submit"], .social-button { background: var(--primary-600) !important; color: var(--text-inverse) !important; border: none !important; border-radius: 10px !important; padding: 10px 16px !important; cursor: pointer !important; transition: filter .2s ease, transform .12s ease, box-shadow .2s ease; }
+      button:hover, .btn:hover, input[type="submit"]:hover, .social-button:hover, .btn-playstore:hover, .btn-appstore:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 8px 18px rgba(17, 12, 34, 0.18); }
+      input, textarea, select, .resp, .controls { border: 1.5px solid var(--primary-600) !important; border-radius: 10px !important; background: var(--surface) !important; color: var(--text) !important; }
+      footer { background: var(--primary-700) !important; color: var(--text-inverse) !important; }
+      .boton, .boton-abajo { background: var(--primary-600) !important; }
+      .message { background: var(--muted) !important; color: var(--text-soft) !important; border-radius: var(--radius) !important; }
+      .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 16px; }
+      .grid { display: grid; gap: 16px; }
+      .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+      .progress { width: 100%; height: 10px; background: #eee; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+      .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--primary-600), var(--primary)); width: 0%; transition: width .6s ease; }
+      @keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+      .fade-in { animation: fadeInUp .4s ease both; }
+      .toast { position: fixed; right: 20px; bottom: 20px; transform: translateY(12px); background: var(--primary-700); color: #fff; padding: 8px 12px; border-radius: 8px; opacity: 0; transition: .22s ease; box-shadow: 0 10px 24px rgba(0,0,0,.18); font-size: 13px; max-width: 80vw; }
+      .toast.show { opacity: 1; transform: translateY(0); }
+      .ripple { position: relative; overflow: hidden; }
+      .ripple::after { content: ""; position: absolute; border-radius: 50%; transform: scale(0); background: rgba(255,255,255,.35); opacity: 0; pointer-events: none; }
+      .no-anim *, .no-anim *::before, .no-anim *::after { transition: none !important; animation: none !important; }
+      [data-theme="dark"] { --bg: #0f0a1a; --surface: #171022; --muted: #1f1530; --text: #ece8f5; --text-soft: #cfc4e8; --text-inverse: #ffffff; --border: rgba(236, 232, 245, 0.12); --shadow: 0 8px 20px rgba(0,0,0,.35); --primary: #7c3aed; --primary-600: #7c3aed; --primary-700: #6d28d9; --primary-800: #4c1d95; }
+      [data-theme="dark"] header { background: linear-gradient(90deg, #2b0f58, var(--primary-600)); }
+      [data-theme="dark"] nav { background: #2b0f58; }
+      [data-theme="dark"] footer { background: #2b0f58 !important; }
+    </style>
+    <style>
+      /* contacto.css inlined */
+      body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #CAD2C5; color: #354F52; line-height: 1.6; }
+      header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: white; padding: 30px; text-align: center; }
+      nav { display: flex; justify-content: center; background-color: #6D28D9; padding: 10px 0; }
+      nav a { color: white; text-decoration: none; padding: 12px 20px; margin: 0 15px; font-size: 1.1em; font-weight: bold; transition: background-color 0.3s ease, border-radius 0.3s ease; }
+      nav a:hover { background-color: #5B21B6; border-radius: 20px; }
+      .container { width: 90%; max-width: 800px; margin: 30px auto; padding: 20px; background: #FFFFFF; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+      .contact-card { background: #F5F5F5; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); display: flex; align-items: center; flex-direction: column; }
+      .contact-card img { width: 40px; margin-right: 15px; }
+      .contact-card p { font-size: 1.2em; margin: 0; color: #52796F; margin-bottom: 20px; }
+      .contact-form { background: #E8F5E9; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+      .contact-form h3 { color: #52796F; margin-bottom: 15px; }
+      .contact-form label { display: block; margin-top: 10px; }
+      .contact-form input[type="text"],
+      .contact-form input[type="email"],
+      .contact-form textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #CAD2C5; border-radius: 4px; box-sizing: border-box; }
+      .contact-form input[type="submit"] { background-color: #52796F; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+      footer { text-align: center; padding: 20px; background-color: #52796F; color: white; font-size: 1.2em; position: relative; width: 100%; bottom: 0; }
+      .social-buttons { display: flex; justify-content: center; gap: 10px; }
+      .social-button { background-color: #52796F; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; transition: background-color 0.3s ease; }
+      .social-button:hover { background-color: #52796F; }
+      .boton { position: fixed; bottom: 20px; right: 20px; background-color: #84A98C; color: white; border: none; padding: 20px 25px; cursor: pointer; border-radius: 10px; display: none; font-size: 20px; transition: all 0.3s ease; }
+      .boton-abajo { right: 80px; background-color: #84A98C; }
+      .boton:hover { opacity: 0.8; }
+    </style>
+    <link rel="icon" href="../Imagenes/logo (1).ico">
+    <script>
+      (function(){
+        try {
+          const s = JSON.parse(localStorage.getItem('app_settings')||'{}');
+          const root = document.documentElement;
+          root.removeAttribute('data-theme');
+          if(s.fontSize){ root.style.setProperty('--font-size-base', (Number(s.fontSize)||16)+'px'); }
+          if(s.reduceMotion){ document.addEventListener('DOMContentLoaded', ()=> document.body.classList.add('no-anim')); }
+        } catch(e){}
+      })();
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Contacto</h1>
+    </header>
+
+    <nav>
+        <a class="ripple" href="index.html">Inicio</a>
+        <a class="ripple" href="about.html">Sobre Nosotros</a>
+        <a class="ripple" href="download.html">Descargar</a>
+        <a class="ripple" href="contacto.html">Contacto</a>
+    </nav>
+
+    <section class="container fade-in">
+        <h2>¿Tienes preguntas? 📩</h2>
+
+        <div class="contact-card fade-in">
+            <img src="../Imagenes/enviar-correo-electronico.png" alt="Teléfono">
+            <p><strong>Teléfono:</strong> +503 67895432</p>
+        </div>
+
+        <div class="contact-card fade-in">
+            <img src="../Imagenes/correo-electronico.png" alt="Correo">
+            <p><strong>Correo:</strong> <a href="mailto:SkillRise@gmail.com">SkillRise@gmail.com</a></p>
+        </div>
+
+        <div class="contact-card fade-in">
+            <img src="../Imagenes/calendario.png" alt="Horario">
+            <p><strong>Horario:</strong> Lunes a Viernes 9:00 AM - 6:00 PM</p>
+        </div>
+
+        <section class="contact-form fade-in">
+            <h3>Envíanos un mensaje</h3>
+            <form action="#" method="post">
+                <label for="nombre">Nombre:</label><br>
+                <input type="text" id="nombre" name="nombre" required><br><br>
+
+                <label for="email">Correo electrónico:</label><br>
+                <input type="email" id="email" name="email" required><br><br>
+
+                <label for="mensaje">Mensaje:</label><br>
+                <textarea id="mensaje" name="mensaje" rows="4" cols="50" required></textarea><br><br>
+
+                <input class="ripple" type="submit" value="Enviar">
+            </form>
+        </section>
+
+        <div class="contact-card fade-in">
+            <h2>¡Síguenos en nuestras redes sociales!</h2>
+            <div class="social-buttons">
+                <a href="#" target="_blank" class="social-button ripple">Facebook</a>
+                <a href="#" target="_blank" class="social-button ripple">Twitter</a>
+                <a href="#" target="_blank" class="social-button ripple">Instagram</a>
+            </div>
+        </div>        
+
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Namiro. Todos los derechos reservados.</p>
+        <button id="irArriba" class="boton ripple" onclick="scrollToTop()">⬆</button>
+    <button id="irAbajo" class="boton boton-abajo ripple" onclick="scrollToBottom()">⬇</button>
+
+    <script>
+        // Ripple effect
+        document.addEventListener('click', function(e){
+          const t = e.target.closest('.ripple');
+          if(!t) return;
+          const rect = t.getBoundingClientRect();
+          const d = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - d/2;
+          const y = e.clientY - rect.top - d/2;
+          const wave = document.createElement('span');
+          wave.style.position='absolute';wave.style.borderRadius='50%';
+          wave.style.pointerEvents='none';wave.style.width=wave.style.height=d+'px';
+          wave.style.left=x+'px';wave.style.top=y+'px';
+          wave.style.background='rgba(255,255,255,.35)';
+          wave.style.transform='scale(0)';wave.style.opacity='0.9';
+          wave.style.transition='transform .45s ease, opacity .6s ease';
+          t.style.position='relative'; t.appendChild(wave);
+          requestAnimationFrame(()=>{ wave.style.transform='scale(1.8)'; wave.style.opacity='0'; });
+          setTimeout(()=> wave.remove(), 650);
+        });
+        // Función para ir al fondo de la página
+        function scrollToBottom() {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // Función para regresar arriba
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mostrar/ocultar los botones según el scroll
+        window.addEventListener("scroll", function() {
+            let irArriba = document.getElementById("irArriba");
+            let irAbajo = document.getElementById("irAbajo");
+
+            if (window.scrollY > 100) {
+                irArriba.style.display = "block";
+            } else {
+                irArriba.style.display = "none";
+            }
+
+            if (window.innerHeight + window.scrollY < document.body.offsetHeight - 100) {
+                irAbajo.style.display = "block";
+            } else {
+                irAbajo.style.display = "none";
+            }
+        });
+    </script>
+    </footer>
+</body>
+</html>

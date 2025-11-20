@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nosotros - Namiro</title>
+    <style>
+      :root { --primary: #5a189a; --primary-600: #6d28d9; --primary-700: #5b21b6; --primary-800: #3b0a77; --bg: #faf9ff; --surface: #ffffff; --muted: #ede6ff; --text: #140e26; --text-soft: #2a1b4a; --text-inverse: #ffffff; --border: rgba(17, 12, 34, 0.12); --radius: 12px; --shadow: 0 6px 16px rgba(17, 12, 34, 0.12); --font-size-base: 16px; }
+      html, body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; }
+      html { font-size: var(--font-size-base); }
+      a { color: var(--primary-700); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: var(--text-inverse); }
+      nav { background: var(--primary-700); box-shadow: var(--shadow); }
+      nav a { color: var(--text-inverse) !important; border-radius: 8px; font-weight: 600; }
+      nav a:hover { background: var(--primary-600) !important; }
+      section, .container, .contact-card, .descarga-opciones, .contact-form, .contact-box { background: var(--surface) !important; border-radius: var(--radius) !important; box-shadow: var(--shadow) !important; border: 1px solid var(--border) !important; }
+      h1, h2, h3 { color: var(--primary-700); }
+      header, .site-header, nav, footer { color: var(--text-inverse) !important; }
+      header h1, header h2, header p, .site-header h1, .site-header h2, .site-header p, nav a, footer p { color: var(--text-inverse) !important; }
+      li strong, .contact-card p, .btn-playstore, .btn-appstore { color: var(--primary-700); }
+      button, .btn, input[type="submit"], .social-button { background: var(--primary-600) !important; color: var(--text-inverse) !important; border: none !important; border-radius: 10px !important; padding: 10px 16px !important; cursor: pointer !important; transition: filter .2s ease, transform .12s ease, box-shadow .2s ease; }
+      button:hover, .btn:hover, input[type="submit"]:hover, .social-button:hover, .btn-playstore:hover, .btn-appstore:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 8px 18px rgba(17, 12, 34, 0.18); }
+      input, textarea, select, .resp, .controls { border: 1.5px solid var(--primary-600) !important; border-radius: 10px !important; background: var(--surface) !important; color: var(--text) !important; }
+      footer { background: var(--primary-700) !important; color: var(--text-inverse) !important; }
+      .boton, .boton-abajo { background: var(--primary-600) !important; }
+      .message { background: var(--muted) !important; color: var(--text-soft) !important; border-radius: var(--radius) !important; }
+      .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 16px; }
+      .grid { display: grid; gap: 16px; }
+      .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+      .progress { width: 100%; height: 10px; background: #eee; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+      .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--primary-600), var(--primary)); width: 0%; transition: width .6s ease; }
+      @keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+      .fade-in { animation: fadeInUp .4s ease both; }
+      .fab { position: fixed !important; right: 16px !important; top: 16px !important; bottom: auto !important; left: auto !important; z-index: 1000 !important; width: 56px; height: 56px; border-radius: 50%; background: var(--primary-600); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(17,12,34,.18); border: none; }
+      .fab:hover { filter: brightness(1.06); transform: translateY(-1px); }
+      .drawer-backdrop { position: fixed; inset: 0; background: rgba(10, 6, 20, .36); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+      .drawer { position: fixed; top: 0; right: -360px; width: 360px; max-width: 90%; height: 100vh; background: var(--surface); box-shadow: -4px 0 20px rgba(0,0,0,.12); border-left: 1px solid var(--border); transition: right .28s ease; display: flex; flex-direction: column; }
+      .drawer.open { right: 0; }
+      .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+      .drawer header { padding: 16px; background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: #fff; }
+      .drawer header h3 { color: #fffbeb !important; }
+      .drawer .content { padding: 16px; overflow: auto; flex: 1; }
+      .toast { position: fixed; right: 20px; bottom: 20px; transform: translateY(12px); background: var(--primary-700); color: #fff; padding: 8px 12px; border-radius: 8px; opacity: 0; transition: .22s ease; box-shadow: 0 10px 24px rgba(0,0,0,.18); font-size: 13px; max-width: 80vw; }
+      .toast.show { opacity: 1; transform: translateY(0); }
+      .ripple { position: relative; overflow: hidden; }
+      .ripple::after { content: ""; position: absolute; border-radius: 50%; transform: scale(0); background: rgba(255,255,255,.35); opacity: 0; pointer-events: none; }
+      .no-anim *, .no-anim *::before, .no-anim *::after { transition: none !important; animation: none !important; }
+      [data-theme="dark"] { --bg: #0f0a1a; --surface: #171022; --muted: #1f1530; --text: #ece8f5; --text-soft: #cfc4e8; --text-inverse: #ffffff; --border: rgba(236, 232, 245, 0.12); --shadow: 0 8px 20px rgba(0,0,0,.35); --primary: #7c3aed; --primary-600: #7c3aed; --primary-700: #6d28d9; --primary-800: #4c1d95; }
+      [data-theme="dark"] header { background: linear-gradient(90deg, #2b0f58, var(--primary-600)); }
+      [data-theme="dark"] nav { background: #2b0f58; }
+      [data-theme="dark"] footer { background: #2b0f58 !important; }
+      .switch { position: relative; width: 44px; height: 24px; background: #e5e7eb; border-radius: 999px; cursor: pointer; transition: background .2s ease; border: 1px solid var(--border); }
+      .switch .thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,.2); transition: left .2s ease, background .2s ease; }
+      .switch.on { background: var(--primary-600); }
+      .switch.on .thumb { left: 22px; background: #111827; }
+      .switch.on .thumb .icon-moon { color: #f5f5f5 !important; }
+      .segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
+      .segmented button { border: none; background: transparent; padding: 8px 12px; cursor: pointer; color: var(--text); transition: background .18s ease, color .18s ease; font-weight: 600; }
+      .segmented button + button { border-left: 1px solid var(--border); }
+      .segmented button:hover { background: var(--muted); }
+      .segmented button:active { transform: none; }
+      .segmented button.active { background: color-mix(in srgb, var(--primary-600) 14%, transparent); color: var(--primary-700); }
+      [data-theme="dark"] .switch { background: #1f2937; border-color: var(--border); }
+      [data-theme="dark"] .segmented { background: var(--surface); }
+      .tabs { display: flex; gap: 8px; padding: 8px 16px; border-bottom: 1px solid var(--border); }
+      .tabs .tab-btn { border: none; background: transparent; color: var(--text); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+      .tabs .tab-btn.active { background: var(--muted); }
+      @keyframes slideInX { from { opacity:.0; transform: translateX(6px);} to{ opacity:1; transform:none;} }
+      .slide-in { animation: slideInX .25s ease both; }
+    </style>
+    <style>
+      /* about.css inlined */
+      body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background-color: #CAD2C5; color: #354F52; line-height: 1.8; }
+      header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: white; padding: 40px 20px; text-align: center; }
+      header h1 { font-size: 2.8em; font-weight: bold; margin: 0; letter-spacing: 2px; }
+      nav { display: flex; justify-content: center; background-color: #6D28D9; padding: 12px 0; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+      nav a { color: white; text-decoration: none; padding: 14px 22px; margin: 0 15px; font-size: 1.2em; font-weight: bold; transition: all 0.3s ease; border-radius: 8px; }
+      nav a:hover { background-color: #5B21B6; border-radius: 20px; transform: scale(1.1); }
+      .container { width: 90%; max-width: 1200px; margin: 40px auto; padding: 20px; }
+      section { margin: 40px auto; padding: 25px; background-color: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center; max-width: 900px; }
+      li strong { font-weight: bold; color: #52796F; font-size: 1.1em; }
+      ul { text-align: justify; list-style-position: inside; }
+      .imagen-debajo { display: block; margin: 0 auto; }
+      section h2 { font-size: 2em; color: #52796F; margin-bottom: 15px; font-weight: bold; }
+      section p { font-size: 1.2em; text-align: justify; margin-bottom: 20px; color: #2F3E46; }
+      .imagen { width: 100%; max-width: 600px; height: auto; margin: 20px auto; display: block; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+      footer { text-align: center; padding: 25px; background-color: #52796F; color: white; font-size: 1.2em; width: 100%; }
+      @media (max-width: 768px) {
+        header h1 { font-size: 2.3em; }
+        nav { flex-direction: column; align-items: center; }
+        nav a { padding: 12px; margin: 5px 0; width: 80%; text-align: center; }
+        section { padding: 20px; }
+      }
+      .boton { position: fixed; bottom: 20px; right: 20px; background-color: #84A98C; color: white; border: none; padding: 20px 25px; cursor: pointer; border-radius: 10px; display: none; font-size: 20px; transition: all 0.3s ease; }
+      .boton-abajo { right: 80px; background-color: #84A98C; }
+      .boton:hover { opacity: 0.8; }
+    </style>
+    <link rel="icon" href="../Imagenes/logo (1).ico">
+    <script>
+      (function(){
+        try {
+          const s = JSON.parse(localStorage.getItem('app_settings')||'{}');
+          const root = document.documentElement;
+          root.removeAttribute('data-theme');
+          if(s.fontSize){ root.style.setProperty('--font-size-base', (Number(s.fontSize)||16)+'px'); }
+          if(s.reduceMotion){ document.addEventListener('DOMContentLoaded', ()=> document.body.classList.add('no-anim')); }
+        } catch(e){}
+      })();
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Sobre Nosotros</h1>
+    </header>
+    
+    <nav>
+        <a class="ripple" href="index.html">Inicio</a>
+        <a class="ripple" href="about.html">Sobre Nosotros</a>
+        <a class="ripple" href="download.html">Descargar</a>
+        <a class="ripple" href="contacto.html">Contacto</a>
+    </nav>
+    
+    <section class="fade-in">
+        <h2>¿Quienes somos?</h2>
+            <p>Somos un equipo de jóvenes apasionados y comprometidos con la idea de transformar la forma en que las personas aprenden y aplican las habilidades blandas. Este proyecto nació del entusiasmo y la colaboración de cuatro jóvenes visionarios: Andrea Hernandez, Lindsay Aguilar, Jose Alarcon y Axel Ventura. Cada uno de nosotros aporta una perspectiva única y valiosa al proyecto:</p>
+                <ul>
+                    <li><strong>Creatividad y visión:</strong> Impulsan la creación de experiencias de aprendizaje innovadoras y atractivas.</li>
+                    <li><strong>Pasión por la educación:</strong> Aseguran que la aplicación sea accesible y útil para todos.</li>
+                    <li><strong>Enfoque analítico:</strong> Esencial para el desarrollo de actividades interactivas y desafíos efectivos.</li>
+                    <li><strong>Entusiasmo por la tecnología:</strong> Garantiza una aplicación funcional, intuitiva y divertida.</li>
+                </ul>
+                <img src="../Imagenes/logo.png" alt="SkillRise" width="200px" height="200px">
+    </section>
+    <section class="fade-in">
+        <h2>Nuestra Historia</h2>
+        <p>Todo comenzó con una chispa, una idea que nació de la observación de un mundo donde las habilidades blandas, esas herramientas esenciales para construir puentes entre personas, a menudo se pasaban por alto. Vimos una oportunidad, no solo para informar, sino para transformar la forma en que aprendemos y aplicamos estas habilidades.</p>
+        <p>Somos un equipo de jóvenes apasionados, unidos por la convicción de que el conocimiento y la práctica de las habilidades blandas pueden abrir puertas a un futuro más brillante. Somos constructores de puentes, facilitadores de conexiones, y creemos firmemente en el poder de la educación para generar un cambio positivo.</p>
+        <p>Nuestra participación en el Programa Oportunidades nos ha brindado el impulso y las herramientas necesarias para convertir nuestra visión en realidad. Estamos agradecidos por esta oportunidad y comprometidos a aprovecharla al máximo.</p>
+    </section>
+    
+    <section class="fade-in">
+        <h2>¿Por qué lo hacemos?</h2>
+        <p>Porque como Ciudadanos Oportunidades crees que tenemos una segunda oportunidad y que así como hemos recibido, queremos devolver a la sociedad, y no es solo eso, nuestros valores CRIARSE nos llevan a buscar lo mejor para todos, buscando un mundo más equitativo.</p>
+        <p>Además creemos en un mundo donde la comunicación efectiva, el trabajo en equipo, la resolución de problemas y la empatía son las bases para construir relaciones sólidas y alcanzar el éxito. Queremos democratizar el aprendizaje de estas habilidades, haciéndolo accesible y divertido para todos.</p>
+        <p>A través de nuestros juegos, queremos inspirar a las personas a descubrir su potencial, a conectarse con otros y a construir un futuro donde las habilidades blandas sean tan valoradas como las habilidades técnicas.</p>
+        <p>Te invitamos a que formes parte del cambio, a explorar nuestros juegos, a compartir nuestra pasión por construir un mundo mejor, a impulsarte a ser una persona llena de habilidades mejoradas. </p>
+    </section>
+    <section class="fade-in">
+        <h3>¡Juntos, podemos marcar la diferencia!</h3>
+    </section>
+    
+    <footer>
+        <p>&copy; 2025 Namiro. Todos los derechos reservados.</p>
+        <button id="irArriba" class="boton ripple" onclick="scrollToTop()">⬆</button>
+    <button id="irAbajo" class="boton boton-abajo ripple" onclick="scrollToBottom()">⬇</button>
+
+    <script>
+        // Ripple effect
+        document.addEventListener('click', function(e){
+          const t = e.target.closest('.ripple');
+          if(!t) return;
+          const rect = t.getBoundingClientRect();
+          const d = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - d/2;
+          const y = e.clientY - rect.top - d/2;
+          const wave = document.createElement('span');
+          wave.style.position='absolute';wave.style.borderRadius='50%';
+          wave.style.pointerEvents='none';wave.style.width=wave.style.height=d+'px';
+          wave.style.left=x+'px';wave.style.top=y+'px';
+          wave.style.background='rgba(255,255,255,.35)';
+          wave.style.transform='scale(0)';wave.style.opacity='0.9';
+          wave.style.transition='transform .45s ease, opacity .6s ease';
+          t.style.position='relative'; t.appendChild(wave);
+          requestAnimationFrame(()=>{ wave.style.transform='scale(1.8)'; wave.style.opacity='0'; });
+          setTimeout(()=> wave.remove(), 650);
+        });
+        // Función para ir al fondo de la página
+        function scrollToBottom() {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        // Función para regresar arriba
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mostrar/ocultar los botones según el scroll
+        window.addEventListener("scroll", function() {
+            let irArriba = document.getElementById("irArriba");
+            let irAbajo = document.getElementById("irAbajo");
+
+            if (window.scrollY > 100) {
+                irArriba.style.display = "block";
+            } else {
+                irArriba.style.display = "none";
+            }
+
+            if (window.innerHeight + window.scrollY < document.body.offsetHeight - 100) {
+                irAbajo.style.display = "block";
+            } else {
+                irAbajo.style.display = "none";
+            }
+        });
+    </script>
+    </footer>
+</body>
+</html>

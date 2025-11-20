@@ -1,0 +1,387 @@
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenido - Namiru</title>
+  <style>
+    :root { --primary: #5a189a; --primary-600: #6d28d9; --primary-700: #5b21b6; --primary-800: #3b0a77; --bg: #faf9ff; --surface: #ffffff; --muted: #ede6ff; --text: #140e26; --text-soft: #2a1b4a; --text-inverse: #ffffff; --border: rgba(17, 12, 34, 0.12); --radius: 12px; --shadow: 0 6px 16px rgba(17, 12, 34, 0.12); --font-size-base: 16px; }
+    html, body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; }
+    html { font-size: var(--font-size-base); }
+    header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: var(--text-inverse); }
+    footer { background: var(--primary-700) !important; color: var(--text-inverse) !important; }
+    button, .btn { background: var(--primary-600) !important; color: var(--text-inverse) !important; border: none !important; border-radius: 10px !important; padding: 10px 16px !important; cursor: pointer !important; transition: filter .2s ease, transform .12s ease, box-shadow .2s ease; }
+    button:hover, .btn:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 8px 18px rgba(17, 12, 34, 0.18); }
+    input { border: 1.5px solid var(--primary-600) !important; border-radius: 10px !important; background: var(--surface) !important; color: var(--text) !important; }
+    .toast { position: fixed; right: 20px; bottom: 20px; transform: translateY(12px); background: var(--primary-700); color: #fff; padding: 8px 12px; border-radius: 8px; opacity: 0; transition: .22s ease; box-shadow: 0 10px 24px rgba(0,0,0,.18); font-size: 13px; max-width: 80vw; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.error { background: #dc2626; }
+    [data-theme="dark"] { --bg: #0f0a1a; --surface: #171022; --muted: #1f1530; --text: #ece8f5; --text-soft: #cfc4e8; --text-inverse: #ffffff; --border: rgba(236, 232, 245, 0.12); --shadow: 0 8px 20px rgba(0,0,0,.35); --primary: #7c3aed; --primary-600: #7c3aed; --primary-700: #6d28d9; --primary-800: #4c1d95; }
+  </style>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #4c1d95 0%, #7c3aed 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 2rem;
+      font-weight: 300;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1rem;
+    }
+    .form-toggle {
+      display: flex;
+      background: #f0f0f0;
+      border-radius: 25px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+    .toggle-btn {
+      flex: 1;
+      padding: 12px 20px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+    }
+    .toggle-btn.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      transform: scale(1.05);
+    }
+    .form-container {
+      position: relative;
+      min-height: 300px;
+    }
+    .form {
+      position: absolute;
+      width: 100%;
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 0.4s ease;
+      pointer-events: none;
+    }
+    .form.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: all;
+    }
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: #fafafa;
+    }
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    }
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    /* Darker primary for Register action */
+    #registerForm .btn { background: linear-gradient(135deg, #3b0a77, #5b21b6); }
+    #loginForm .btn { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+    .btn:active {
+      transform: translateY(0);
+    }
+    .forgot-password {
+      margin-top: 15px;
+      color: #667eea;
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .forgot-password:hover {
+      color: #764ba2;
+      text-decoration: underline;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+        margin: 20px 10px;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .logo {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+<script>
+  // No redirigir automáticamente. Mostramos aviso si hay sesión activa.
+</script>
+</head>
+<body>
+
+  <div class="container">
+    <div class="logo">MA</div>
+    <h1>¡Bienvenido a Namiru!</h1>
+    <p class="subtitle">Accede a tu cuenta o crea una nueva</p>
+    <div class="form-toggle">
+      <button class="toggle-btn ripple active" onclick="showLogin()">Iniciar Sesión</button>
+      <button class="toggle-btn ripple" onclick="showRegister()">Registrarse</button>
+    </div>
+
+    <div class="form-container">
+      <!-- Formulario de Login -->
+      <div id="loginForm" class="form active">
+        <div class="form-group">
+          <label for="loginEmail">Correo Electrónico</label>
+          <input type="email" id="loginEmail" placeholder="tu@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Contraseña</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn ripple" onclick="handleLogin()">Iniciar Sesión</button>
+      </div>
+
+      <!-- Formulario de Registro -->
+      <div id="registerForm" class="form">
+        <div class="form-group">
+          <label for="registerName">Nombre Completo</label>
+          <input type="text" id="registerName" placeholder="Tu nombre completo" required>
+        </div>
+        <div class="form-group">
+          <label for="registerEmail">Correo Electrónico</label>
+          <input type="email" id="registerEmail" placeholder="tu@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="registerPassword">Contraseña</label>
+          <input type="password" id="registerPassword" placeholder="••••••••" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar Contraseña</label>
+          <input type="password" id="confirmPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn ripple" onclick="handleRegister()">Crear Cuenta</button>
+      </div>
+    </div>
+  </div>
+ 
+   <script>
+     // Aviso de sesión activa con opciones (Entrar / Cambiar de cuenta)
+     (function(){
+       try{
+         const ses = localStorage.getItem('session');
+         if(!ses) return;
+         const cont = document.querySelector('.container');
+         const bar = document.createElement('div');
+         bar.style.background = '#eef2ff';
+         bar.style.border = '1px solid #e5e7eb';
+         bar.style.borderRadius = '10px';
+         bar.style.padding = '10px';
+         bar.style.marginBottom = '16px';
+         bar.style.display = 'flex';
+         bar.style.justifyContent = 'space-between';
+         bar.style.alignItems = 'center';
+         const msg = document.createElement('div'); msg.textContent = `Sesión activa: ${ses}`;
+         const actions = document.createElement('div'); actions.style.display='flex'; actions.style.gap='8px';
+         const btnEnter = document.createElement('button'); btnEnter.className='btn'; btnEnter.textContent='Entrar a juegos'; btnEnter.onclick=()=> window.location.href='Inicio.html';
+         const btnSwitch = document.createElement('button'); btnSwitch.className='btn'; btnSwitch.textContent='Cambiar de cuenta'; btnSwitch.onclick=()=>{ try{ localStorage.removeItem('session'); localStorage.removeItem('profileEmail'); localStorage.removeItem('profileName'); }catch(e){}; window.location.reload(); };
+         actions.appendChild(btnEnter); actions.appendChild(btnSwitch);
+         bar.appendChild(msg); bar.appendChild(actions);
+         cont.insertBefore(bar, cont.firstChild);
+       }catch(e){}
+     })();
+   </script>
+
+  <script type="module">
+
+    // Mostrar formularios
+    window.showLogin = () => {
+      document.getElementById('loginForm').classList.add('active');
+      document.getElementById('registerForm').classList.remove('active');
+      document.querySelectorAll('.toggle-btn')[0].classList.add('active');
+      document.querySelectorAll('.toggle-btn')[1].classList.remove('active');
+    };
+
+    window.showRegister = () => {
+      document.getElementById('registerForm').classList.add('active');
+      document.getElementById('loginForm').classList.remove('active');
+      document.querySelectorAll('.toggle-btn')[1].classList.add('active');
+      document.querySelectorAll('.toggle-btn')[0].classList.remove('active');
+    };
+
+    // Utilidades de almacenamiento y validación
+    function getUsers(){
+      try { return JSON.parse(localStorage.getItem('users_db')||'{}'); } catch(e){ return {}; }
+    }
+    function saveUsers(u){ try { localStorage.setItem('users_db', JSON.stringify(u||{})); } catch(e){} }
+    function isGmail(email){ return /^[A-Za-z0-9._%+-]+@gmail\.com$/.test(String(email||'').trim()); }
+    function validPass(p){ return String(p||'').length >= 6; }
+    function defaultSettings(){ return { theme:'light', fontSize:16, reduceMotion:false }; }
+    function showError(msg){ showToast(msg, true); }
+
+    // Registrar usuario (gmail obligatorio y password >= 6)
+    window.handleRegister = () => {
+      const name = document.getElementById('registerName').value.trim();
+      const email = document.getElementById('registerEmail').value.trim();
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (!name || !email || !password || !confirmPassword) { showError("Por favor completa todos los campos"); return; }
+      if (!isGmail(email)){
+        showError("El correo debe ser de dominio gmail.com"); return;
+      }
+      if (!validPass(password)){ showError("La contraseña debe tener 6 caracteres o más"); return; }
+      if (password !== confirmPassword) { showError("Las contraseñas no coinciden"); return; }
+      const users = getUsers();
+      if (users[email]){ showError("Este correo ya está registrado"); return; }
+      users[email] = { name, password, settings: defaultSettings(), progress: {} };
+      saveUsers(users);
+      try {
+        localStorage.setItem('profileName', name || 'Usuario');
+        localStorage.setItem('profileEmail', email || '');
+        localStorage.setItem('session', email);
+        // sincroniza app_settings con la cuenta
+        localStorage.setItem('app_settings', JSON.stringify(users[email].settings));
+      } catch(e){}
+      showToast('Cuenta creada exitosamente');
+      setTimeout(()=>{ window.location.replace('Inicio.html'); }, 900);
+    };
+
+    // Iniciar sesión (valida existencia y password)
+    window.handleLogin = () => {
+      const email = (document.getElementById('loginEmail').value||'').trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!email || !password) { showError("Por favor completa todos los campos"); return; }
+      if (!isGmail(email)){
+        showError("El correo debe ser de dominio gmail.com"); return;
+      }
+      if (!validPass(password)){ showError("La contraseña debe tener 6 caracteres o más"); return; }
+      const users = getUsers();
+      const u = users[email];
+      if (!u){ showError("No existe una cuenta con ese correo"); return; }
+      if (u.password !== password){ showError("Contraseña incorrecta"); return; }
+      try {
+        localStorage.setItem('profileEmail', email);
+        localStorage.setItem('profileName', u.name || email.split('@')[0]);
+        localStorage.setItem('session', email);
+        // aplica y sincroniza ajustes de la cuenta
+        const s = u.settings || defaultSettings();
+        localStorage.setItem('app_settings', JSON.stringify(s));
+      } catch(e){}
+      showToast('Bienvenido de vuelta');
+      setTimeout(()=>{ window.location.replace('Inicio.html'); }, 700);
+    };
+    // Ripple effect util (click animations)
+    document.addEventListener('click', function(e){
+      const t = e.target.closest('.ripple');
+      if(!t) return;
+      const rect = t.getBoundingClientRect();
+      const d = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - d/2;
+      const y = e.clientY - rect.top - d/2;
+      const wave = document.createElement('span');
+      wave.style.position='absolute';wave.style.borderRadius='50%';
+      wave.style.pointerEvents='none';wave.style.width=wave.style.height=d+'px';
+      wave.style.left=x+'px';wave.style.top=y+'px';
+      wave.style.background='rgba(255,255,255,.35)';
+      wave.style.transform='scale(0)';wave.style.opacity='0.9';
+      wave.style.transition='transform .45s ease, opacity .6s ease';
+      t.style.position='relative'; t.appendChild(wave);
+      requestAnimationFrame(()=>{ wave.style.transform='scale(1.8)'; wave.style.opacity='0'; });
+      setTimeout(()=> wave.remove(), 650);
+    });
+
+    // Toast util
+    function showToast(msg, isError){
+      let el = document.getElementById('toast');
+      if(!el){ el = document.createElement('div'); el.id='toast'; el.className='toast'; document.body.appendChild(el); }
+      el.textContent = msg || '';
+      el.classList.toggle('error', !!isError);
+      el.classList.add('show');
+      setTimeout(()=> el.classList.remove('show'), 1600);
+    }
+  </script>
+
+  <!-- Toast container (created lazily by script if missing) -->
+</body>
+</html>

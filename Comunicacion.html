@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comunicación Empática</title>
+  <style>
+    :root {
+      --primary: #5a189a; /* deeper for contrast */
+      --primary-600: #6d28d9;
+      --primary-700: #5b21b6;
+      --primary-800: #3b0a77;
+      --bg: #faf9ff;
+      --surface: #ffffff;
+      --muted: #ede6ff;
+      --text: #140e26;
+      --text-soft: #2a1b4a;
+      --text-inverse: #ffffff;
+      --border: rgba(17, 12, 34, 0.12);
+      --radius: 12px;
+      --shadow: 0 6px 16px rgba(17, 12, 34, 0.12);
+      --font-size-base: 16px;
+    }
+    html, body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; }
+    html { font-size: var(--font-size-base); }
+    a { color: var(--primary-700); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: var(--text-inverse); }
+    nav { background: var(--primary-700); box-shadow: var(--shadow); }
+    nav a { color: var(--text-inverse) !important; border-radius: 8px; font-weight: 600; }
+    nav a:hover { background: var(--primary-600) !important; }
+    section, .container, .contact-card, .descarga-opciones, .contact-form, .contact-box { background: var(--surface) !important; border-radius: var(--radius) !important; box-shadow: var(--shadow) !important; border: 1px solid var(--border) !important; }
+    h1, h2, h3 { color: var(--primary-700); }
+    header, .site-header, nav, footer { color: var(--text-inverse) !important; }
+    header h1, header h2, header p, .site-header h1, .site-header h2, .site-header p, nav a, footer p { color: var(--text-inverse) !important; }
+    li strong, .contact-card p, .btn-playstore, .btn-appstore { color: var(--primary-700); }
+    button, .btn, input[type="submit"], .social-button { background: var(--primary-600) !important; color: var(--text-inverse) !important; border: none !important; border-radius: 10px !important; padding: 10px 16px !important; cursor: pointer !important; transition: filter .2s ease, transform .12s ease, box-shadow .2s ease; }
+    button:hover, .btn:hover, input[type="submit"]:hover, .social-button:hover, .btn-playstore:hover, .btn-appstore:hover { filter: brightness(1.08); transform: translateY(-1px); box-shadow: 0 8px 18px rgba(17, 12, 34, 0.18); }
+    input, textarea, select, .resp, .controls { border: 1.5px solid var(--primary-600) !important; border-radius: 10px !important; background: var(--surface) !important; color: var(--text) !important; }
+    footer { background: var(--primary-700) !important; color: var(--text-inverse) !important; }
+    .boton, .boton-abajo { background: var(--primary-600) !important; }
+    .message { background: var(--muted) !important; color: var(--text-soft) !important; border-radius: var(--radius) !important; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); padding: 16px; }
+    .grid { display: grid; gap: 16px; }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .progress { width: 100%; height: 10px; background: #eee; border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+    .progress > span { display: block; height: 100%; background: linear-gradient(90deg, var(--primary-600), var(--primary)); width: 0%; transition: width .6s ease; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in { animation: fadeInUp .4s ease both; }
+    .fab { position: fixed !important; right: 16px !important; top: 16px !important; bottom: auto !important; left: auto !important; z-index: 1000 !important; width: 56px; height: 56px; border-radius: 50%; background: var(--primary-600); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(17,12,34,.18); border: none; }
+    .fab:hover { filter: brightness(1.06); transform: translateY(-1px); }
+    .drawer-backdrop { position: fixed; inset: 0; background: rgba(10, 6, 20, .36); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+    .drawer { position: fixed; top: 0; right: -360px; width: 360px; max-width: 90%; height: 100vh; background: var(--surface); box-shadow: -4px 0 20px rgba(0,0,0,.12); border-left: 1px solid var(--border); transition: right .28s ease; display: flex; flex-direction: column; }
+    .drawer.open { right: 0; }
+    .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+    .drawer header { padding: 16px; background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: #fff; }
+    .drawer header h3 { color: #fffbeb !important; }
+    .drawer .content { padding: 16px; overflow: auto; flex: 1; }
+    .toast { position: fixed; right: 20px; bottom: 20px; transform: translateY(12px); background: var(--primary-700); color: #fff; padding: 8px 12px; border-radius: 8px; opacity: 0; transition: .22s ease; box-shadow: 0 10px 24px rgba(0,0,0,.18); font-size: 13px; max-width: 80vw; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .ripple { position: relative; overflow: hidden; }
+    .ripple::after { content: ""; position: absolute; border-radius: 50%; transform: scale(0); background: rgba(255,255,255,.35); opacity: 0; pointer-events: none; }
+    .no-anim *, .no-anim *::before, .no-anim *::after { transition: none !important; animation: none !important; }
+    [data-theme="dark"] { --bg: #0f0a1a; --surface: #171022; --muted: #1f1530; --text: #ece8f5; --text-soft: #cfc4e8; --text-inverse: #ffffff; --border: rgba(236, 232, 245, 0.12); --shadow: 0 8px 20px rgba(0,0,0,.35); --primary: #7c3aed; --primary-600: #7c3aed; --primary-700: #6d28d9; --primary-800: #4c1d95; }
+    [data-theme="dark"] header { background: linear-gradient(90deg, #2b0f58, var(--primary-600)); }
+    [data-theme="dark"] nav { background: #2b0f58; }
+    [data-theme="dark"] footer { background: #2b0f58 !important; }
+    .switch { position: relative; width: 44px; height: 24px; background: #e5e7eb; border-radius: 999px; cursor: pointer; transition: background .2s ease; border: 1px solid var(--border); }
+    .switch .thumb { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,.2); transition: left .2s ease, background .2s ease; }
+    .switch.on { background: var(--primary-600); }
+    .switch.on .thumb { left: 22px; background: #111827; }
+    .switch.on .thumb .icon-moon { color: #f5f5f5 !important; }
+    .segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
+    .segmented button { border: none; background: transparent; padding: 8px 12px; cursor: pointer; color: var(--text); transition: background .18s ease, color .18s ease; font-weight: 600; }
+    .segmented button + button { border-left: 1px solid var(--border); }
+    .segmented button:hover { background: var(--muted); }
+    .segmented button:active { transform: none; }
+    .segmented button.active { background: color-mix(in srgb, var(--primary-600) 14%, transparent); color: var(--primary-700); }
+    [data-theme="dark"] .switch { background: #1f2937; border-color: var(--border); }
+    [data-theme="dark"] .segmented { background: var(--surface); }
+    .tabs { display: flex; gap: 8px; padding: 8px 16px; border-bottom: 1px solid var(--border); }
+    .tabs .tab-btn { border: none; background: transparent; color: var(--text); padding: 8px 12px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+    .tabs .tab-btn.active { background: var(--muted); }
+    @keyframes slideInX { from { opacity:.0; transform: translateX(6px);} to{ opacity:1; transform:none;} }
+    .slide-in { animation: slideInX .25s ease both; }
+  </style>
+  <script>
+    // Session guard
+    (function(){ try { if(!localStorage.getItem('session')) window.location.href='welcome-form.html'; } catch(e){} })();
+    // Per-account helpers
+    function getUsers(){ try { return JSON.parse(localStorage.getItem('users_db')||'{}'); } catch(e){ return {}; } }
+    function saveUsers(u){ try { localStorage.setItem('users_db', JSON.stringify(u||{})); } catch(e){} }
+    function setProgressCommunication(level, total){
+      try {
+        const session = localStorage.getItem('session'); if(!session) return;
+        const users = getUsers(); users[session] = users[session] || {}; users[session].progress = users[session].progress || {};
+        const pct = Math.round((Math.min(level, total)/total)*100);
+        users[session].progress.communication = { level, pct };
+        saveUsers(users);
+      } catch(e){}
+    }
+    function getProgressCommunication(){
+      try {
+        const session = localStorage.getItem('session'); if(!session) return null;
+        const u = getUsers()[session];
+        return u && u.progress && u.progress.communication || null;
+      } catch(e){ return null; }
+    }
+  </script>
+  <script>
+    (function(){
+      try {
+        const s = JSON.parse(localStorage.getItem('app_settings')||'{}');
+        const root = document.documentElement;
+        if(s.theme==='dark') root.setAttribute('data-theme','dark'); else root.removeAttribute('data-theme');
+        if(s.fontSize){ root.style.setProperty('--font-size-base', (Number(s.fontSize)||16)+'px'); }
+        if(s.reduceMotion){ document.addEventListener('DOMContentLoaded', ()=> document.body.classList.add('no-anim')); }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    :root {
+      --c1: #6b21a8; /* primary */
+      --c2: #7c3aed; /* accent */
+      --c3: #c4b5fd; /* light surface */
+      --c4: var(--bg); /* page bg */
+      --c5: #efe7ff; /* message/bg tint */
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #app {
+      background: var(--surface);
+      width: 100%;
+      max-width: 480px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    header {
+      background: var(--c1);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    #nivel-actual {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    #game-area {
+      flex: 1;
+      background: var(--surface);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 1.2rem;
+      animation: fadeInUp .4s ease both;
+    }
+
+    button {
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      background: var(--c5);
+      color: #333;
+      font-size: 1rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: var(--c1);
+      color: white;
+    }
+
+    #mensaje {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(107, 33, 168, 0.92);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      z-index: 10;
+    }
+
+    #mensaje.mostrar {
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>🌟 Comunicación Empática 🌟</h1>
+      <p id="nivel-actual">Nivel 1: Exploradores Empáticos 🟢</p>
+    </header>
+
+    <main id="game-area"></main>
+
+    <div id="mensaje">
+      <p id="texto-mensaje"></p>
+      <button id="btn-siguiente">Continuar 🚀</button>
+    </div>
+  </div>
+
+  <script>
+    // --- Preguntas y respuestas ---
+    const niveles = [
+      {
+        nivel: "Nivel 1: Exploradores Empáticos 🟢",
+        preguntas: [
+          {
+            texto: "Tu amigo está triste porque perdió su juguete. ¿Qué haces?",
+            opciones: ["Ignoras la situación", "Le dices que no importa", "Lo escuchas y ofreces ayuda"],
+            correcta: 2
+          },
+          {
+            texto: "Ves a alguien nuevo en clase. ¿Qué haces?",
+            opciones: ["Le sonríes y le hablas", "Lo ignoras", "Te burlas de él"],
+            correcta: 0
+          }
+        ]
+      },
+      {
+        nivel: "Nivel 2: Misión Empática 🚀",
+        preguntas: [
+          {
+            texto: "Un compañero olvidó su tarea. ¿Qué haces?",
+            opciones: ["Le ofreces tu ayuda", "Te burlas de él", "Se lo cuentas al profesor"],
+            correcta: 0
+          }
+        ]
+      }
+    ];
+
+    // Inicializa nivel por cuenta si existe progreso guardado
+    let nivelActual = 0;
+    try {
+      const saved = getProgressCommunication();
+      if(saved && Number.isFinite(saved.level)) nivelActual = Math.max(0, Math.min(saved.level, niveles.length));
+    } catch(e){}
+    let preguntaActual = 0;
+
+    const gameArea = document.getElementById('game-area');
+    const nivelTexto = document.getElementById('nivel-actual');
+    const mensaje = document.getElementById('mensaje');
+    const textoMensaje = document.getElementById('texto-mensaje');
+    const btnSiguiente = document.getElementById('btn-siguiente');
+
+    function cargarPregunta() {
+      nivelTexto.textContent = niveles[nivelActual].nivel;
+      const pregunta = niveles[nivelActual].preguntas[preguntaActual];
+      gameArea.innerHTML = `
+        <p>${pregunta.texto}</p>
+        ${pregunta.opciones.map((op, i) => `<button onclick="verificarRespuesta(${i})">${op}</button>`).join('')}
+      `;
+    }
+
+    window.verificarRespuesta = function(i) {
+      const pregunta = niveles[nivelActual].preguntas[preguntaActual];
+      if (i === pregunta.correcta) {
+        textoMensaje.textContent = "¡Buena elección! 😊";
+      } else {
+        textoMensaje.textContent = "Puedes elegir una opción más empática.";
+      }
+      mensaje.classList.add('mostrar');
+    };
+
+    btnSiguiente.addEventListener('click', () => {
+      mensaje.classList.remove('mostrar');
+      preguntaActual++;
+      if (preguntaActual >= niveles[nivelActual].preguntas.length) {
+        // Guardar progreso de nivel completado
+        try {
+          const prev = parseInt(localStorage.getItem('comemp_level')) || 0;
+          const next = Math.max(prev, (nivelActual + 1));
+          localStorage.setItem('comemp_level', next);
+          // Persistir por cuenta
+          setProgressCommunication(next, niveles.length);
+        } catch(e){}
+        nivelActual++;
+        preguntaActual = 0;
+        if (nivelActual >= niveles.length) {
+          gameArea.innerHTML = "<h2>🎉 ¡Felicidades! Has completado todos los niveles. 🌟</h2>";
+          return;
+        }
+      }
+      cargarPregunta();
+    });
+
+    cargarPregunta();
+  </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cargando...</title>
+  <style>
+    :root { --primary: #5a189a; --primary-600: #6d28d9; --primary-700: #5b21b6; --primary-800: #3b0a77; --bg: #faf9ff; --surface: #ffffff; --muted: #ede6ff; --text: #140e26; --text-soft: #2a1b4a; --text-inverse: #ffffff; --border: rgba(17, 12, 34, 0.12); --radius: 12px; --shadow: 0 6px 16px rgba(17, 12, 34, 0.12); --font-size-base: 16px; }
+    html, body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.6; }
+    html { font-size: var(--font-size-base); }
+    header { background: linear-gradient(90deg, var(--primary-800), var(--primary-600)); color: var(--text-inverse); }
+    footer { background: var(--primary-700) !important; color: var(--text-inverse) !important; }
+    .toast { position: fixed; right: 20px; bottom: 20px; transform: translateY(12px); background: var(--primary-700); color: #fff; padding: 8px 12px; border-radius: 8px; opacity: 0; transition: .22s ease; box-shadow: 0 10px 24px rgba(0,0,0,.18); font-size: 13px; max-width: 80vw; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    [data-theme="dark"] { --bg: #0f0a1a; --surface: #171022; --muted: #1f1530; --text: #ece8f5; --text-soft: #cfc4e8; --text-inverse: #ffffff; --border: rgba(236, 232, 245, 0.12); --shadow: 0 8px 20px rgba(0,0,0,.35); --primary: #7c3aed; --primary-600: #7c3aed; --primary-700: #6d28d9; --primary-800: #4c1d95; }
+    [data-theme="dark"] header { background: linear-gradient(90deg, #2b0f58, var(--primary-600)); }
+    [data-theme="dark"] footer { background: #2b0f58 !important; }
+  </style>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f7f5ff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    .loader {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6b21a8, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      color: white;
+      animation: spin 2s linear infinite;
+      position: relative;
+    }
+
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .mensaje {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #3a2a56;
+      text-align: center;
+    }
+
+    .cara {
+      position: absolute;
+      font-size: 50px;
+    }
+
+    .boca-cerrada::after {
+      content: ":)";
+    }
+
+    .boca-abierta::after {
+      content: ":D";
+    }
+  </style>
+</head>
+<body>
+
+  <div class="loader">
+    <div class="cara boca-cerrada" id="cara"></div>
+  </div>
+  <div class="mensaje">Namiro...</div>
+
+  <script>
+    setTimeout(() => {
+     
+      document.getElementById('cara').classList.remove('boca-cerrada');
+      document.getElementById('cara').classList.add('boca-abierta');
+
+     
+      setTimeout(() => {
+        window.location.href = "welcome-form.html";
+      }, 500);
+    }, 3000);
+  </script>
+
+</body>
+</html>
